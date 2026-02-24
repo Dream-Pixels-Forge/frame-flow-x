@@ -1,0 +1,6 @@
+export { DropdownComponent as Dropdown } from './Dropdown'
+export { SliderComponent as Slider } from './Slider'
+export { AvatarComponent as Avatar } from './Avatar'
+export { BadgeComponent as Badge } from './Badge'
+export { TabsComponent as Tabs } from './Tabs'
+export { TooltipComponent as Tooltip } from './Tooltip'

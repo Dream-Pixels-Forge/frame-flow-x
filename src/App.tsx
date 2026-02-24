@@ -1,18 +1,29 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/components'
+import { Layout } from '@/components/layout'
 import { HomePage } from '@/pages/Home'
 import { WorkspacePage } from '@/pages/Workspace'
 import { SettingsPage } from '@/pages/Settings'
 import { NotFoundPage } from '@/pages/NotFound'
+import { ROUTES } from '@/config'
 
 export function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/workspace" element={<WorkspacePage />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route 
+            path={ROUTES.HOME} 
+            element={<Layout currentRoute={ROUTES.HOME}><HomePage /></Layout>} 
+          />
+          <Route 
+            path={ROUTES.WORKSPACE} 
+            element={<Layout currentRoute={ROUTES.WORKSPACE}><WorkspacePage /></Layout>} 
+          />
+          <Route 
+            path={ROUTES.SETTINGS} 
+            element={<Layout currentRoute={ROUTES.SETTINGS}><SettingsPage /></Layout>} 
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

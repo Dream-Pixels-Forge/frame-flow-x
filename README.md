@@ -87,21 +87,39 @@ Week 14-16: ██████████████████████�
 - npm or yarn
 - Git
 
-### Installation (Coming Soon)
+### Installation (Ready to Use)
 
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/frame-flow-x.git
+cd frame-flow-x
 
-# Install dependencies
-npm install
+# Install dependencies (using pnpm)
+pnpm install
 
 # Start development server
-npm run dev
+pnpm dev
 
-# Build desktop app
-npm run build:desktop
+# Build for production
+pnpm build
+
+# Build desktop app (coming soon)
+pnpm build:desktop
 ```
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server at http://localhost:5173 |
+| `pnpm build` | Build for production |
+| `pnpm preview` | Preview production build |
+| `pnpm lint` | Run ESLint |
+| `pnpm lint:fix` | Fix linting issues |
+| `pnpm format` | Format code with Prettier |
+| `pnpm test` | Run tests with Vitest |
+| `pnpm test:e2e` | Run E2E tests with Playwright |
+| `pnpm typecheck` | Run TypeScript type checking |
 
 ## Project Structure
 
