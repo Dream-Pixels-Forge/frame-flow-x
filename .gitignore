@@ -65,3 +65,4 @@ ENV/
 *.temp
 frame_cache/
 video_cache/
+-e "\n# Electron build artifacts\n*.asar\n*.unpacked\nrelease/" 
