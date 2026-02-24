@@ -52,3 +52,42 @@ export function throttle<T extends (...args: unknown[]) => void>(
     }
   }
 }
+
+// Re-export from imageProcessing
+export {
+  applyEnhancements,
+  convertImageFormat,
+  resizeImage,
+  extractFrameFromVideo,
+  batchProcessImages,
+  getImageMetadata,
+} from './imageProcessing'
+export type {
+  ImageProcessingOptions,
+  ImageDimensions,
+  ProcessedImage,
+} from './imageProcessing'
+
+// Re-export from frameExtractor
+export type {
+  FrameExtractionOptions,
+  FrameExtractionResult,
+  ExtractedFrame,
+} from './frameExtractor'
+export { FrameExtractor, FFmpegFrameExtractor } from './frameExtractor'
+
+// Re-export from frameExporter
+export type {
+  ExportOptions,
+  ExportProgress,
+  ExportResult,
+  ExportedFile,
+} from './frameExporter'
+export {
+  FrameExporter,
+  downloadFile,
+  downloadFiles,
+  downloadZip,
+  downloadExportResult,
+  cleanupExportFiles,
+} from './frameExporter'

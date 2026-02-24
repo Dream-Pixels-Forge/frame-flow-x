@@ -93,10 +93,10 @@ export function WorkspacePage() {
   }
 
   const handleStartExtraction = async () => {
-    if (!file) return
-    
+    if (!file?.file) return
+
     setShowGallery(true)
-    await startExtraction(file.path, {
+    await startExtraction(file.file, {
       fps: 1,
       outputFormat: 'png',
       quality: 95,
