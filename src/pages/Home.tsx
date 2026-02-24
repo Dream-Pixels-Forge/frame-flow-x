@@ -1,5 +1,6 @@
 import { Button, Card, Progress } from '@/components'
 import { useThemeStore } from '@/stores/themeStore'
+import { SunIcon, MoonIcon, FilmIcon, SparklesIcon, PaletteIcon } from '@/components/icons'
 
 export function HomePage() {
   const { toggleTheme, isDark } = useThemeStore()
@@ -19,7 +20,8 @@ export function HomePage() {
             variant="bordered" 
             onClick={toggleTheme}
           >
-            {isDark ? '☀️ Light' : '🌙 Dark'}
+            {isDark ? <SunIcon size={16} className="mr-2" /> : <MoonIcon size={16} className="mr-2" />}
+            {isDark ? 'Light' : 'Dark'}
           </Button>
         </header>
 
@@ -48,19 +50,28 @@ export function HomePage() {
         {/* Features */}
         <section className="grid md:grid-cols-3 gap-6 mb-16">
           <Card className="p-6" isHoverable>
-            <h3 className="text-lg font-semibold mb-2">🎬 Frame Extraction</h3>
+            <div className="flex items-center gap-3 mb-2">
+              <FilmIcon size={24} className="text-primary" />
+              <h3 className="text-lg font-semibold">Frame Extraction</h3>
+            </div>
             <p className="text-muted-foreground">
               Extract high-quality frames from any video format with precise control
             </p>
           </Card>
           <Card className="p-6" isHoverable>
-            <h3 className="text-lg font-semibold mb-2">✨ AI Upscaling</h3>
+            <div className="flex items-center gap-3 mb-2">
+              <SparklesIcon size={24} className="text-primary" />
+              <h3 className="text-lg font-semibold">AI Upscaling</h3>
+            </div>
             <p className="text-muted-foreground">
               Enhance resolution up to 4x with advanced AI models
             </p>
           </Card>
           <Card className="p-6" isHoverable>
-            <h3 className="text-lg font-semibold mb-2">🎨 Cinematic Presets</h3>
+            <div className="flex items-center gap-3 mb-2">
+              <PaletteIcon size={24} className="text-primary" />
+              <h3 className="text-lg font-semibold">Cinematic Presets</h3>
+            </div>
             <p className="text-muted-foreground">
               Apply professional cinematic looks with one click
             </p>

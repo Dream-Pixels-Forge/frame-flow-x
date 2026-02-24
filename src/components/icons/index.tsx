@@ -5,6 +5,69 @@ interface IconProps {
   size?: number
 }
 
+export function SunIcon({ className, size = 24 }: IconProps) {
+  return (
+    <svg 
+      className={cn(className)} 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2"
+    >
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2"/>
+      <path d="M12 20v2"/>
+      <path d="m4.93 4.93 1.41 1.41"/>
+      <path d="m17.66 17.66 1.41 1.41"/>
+      <path d="M2 12h2"/>
+      <path d="M20 12h2"/>
+      <path d="m6.34 17.66-1.41 1.41"/>
+      <path d="m19.07 4.93-1.41 1.41"/>
+    </svg>
+  )
+}
+
+export function MoonIcon({ className, size = 24 }: IconProps) {
+  return (
+    <svg 
+      className={cn(className)} 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2"
+    >
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+  )
+}
+
+export function FilmIcon({ className, size = 24 }: IconProps) {
+  return (
+    <svg 
+      className={cn(className)} 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18"/>
+      <line x1="7" x2="7" y1="2" y2="22"/>
+      <line x1="17" x2="17" y1="2" y2="22"/>
+      <line x1="2" x2="22" y1="12" y2="12"/>
+      <line x1="2" x2="7" y1="7" y2="7"/>
+      <line x1="2" x2="7" y1="17" y2="17"/>
+      <line x1="17" x2="22" y1="12" y2="12"/>
+      <line x1="17" x2="22" y1="17" y2="17"/>
+    </svg>
+  )
+}
+
 export function VideoIcon({ className, size = 24 }: IconProps) {
   return (
     <svg 
