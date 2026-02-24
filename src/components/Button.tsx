@@ -6,6 +6,9 @@ interface ButtonPropsExtended extends ButtonProps {
   size?: 'sm' | 'md' | 'lg'
   color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
   isLoading?: boolean
+  as?: React.ElementType
+  href?: string
+  to?: string
 }
 
 export function Button({ 
@@ -15,15 +18,25 @@ export function Button({
   size = 'md',
   color = 'primary',
   isLoading = false,
+  as,
+  href,
+  to,
   ...props 
 }: ButtonPropsExtended) {
+  const componentProps = {
+    ...(href && { href }),
+    ...(to && { to }),
+  }
+
   return (
     <HeroUIButton
+      as={as}
       variant={variant}
       size={size}
       color={color}
       isLoading={isLoading}
       className={cn(className)}
+      {...componentProps}
       {...props}
     >
       {children}

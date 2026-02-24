@@ -30,17 +30,15 @@ export function ModalComponent({
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            {title && (
-              <ModalHeader>{title}</ModalHeader>
-            )}
-            <ModalBody>{children}</ModalBody>
-            {footer && (
-              <ModalFooter>{footer}</ModalFooter>
-            )}
-          </>
-        )}
+        <>
+          {title && (
+            <ModalHeader>{title}</ModalHeader>
+          )}
+          <ModalBody>{children}</ModalBody>
+          {footer && (
+            <ModalFooter>{footer}</ModalFooter>
+          )}
+        </>
       </ModalContent>
     </Modal>
   )
