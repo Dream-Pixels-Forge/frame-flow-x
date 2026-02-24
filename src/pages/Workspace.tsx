@@ -1,35 +1,134 @@
+import { useState } from 'react'
 import { Button, Card } from '@/components'
+import { VideoDropZone, VideoPreview, ExtractionProgress } from '@/components/video'
+import { useVideoImportStore } from '@/stores/videoImportStore'
+import { useFrameExtractionStore } from '@/stores/frameExtractionStore'
+import { Link } from 'react-router-dom'
 
 export function WorkspacePage() {
+  const [extractionStarted, setExtractionStarted] = useState(false)
+  const file = useVideoImportStore((state) => state.file)
+  const startExtraction = useFrameExtractionStore((state) => state.startExtraction)
+  const pauseExtraction = useFrameExtractionStore((state) => state.pauseExtraction)
+  const resumeExtraction = useFrameExtractionStore((state) => state.resumeExtraction)
+  const cancelExtraction = useFrameExtractionStore((state) => state.cancelExtraction)
+
+  const handleFileSelected = (file: File) => {
+    console.log('Video selected:', file.name)
+  }
+
+  const handleStartExtraction = async () => {
+    if (!file) return
+    
+    setExtractionStarted(true)
+    await startExtraction(file.path, {
+      fps: 1,
+      outputFormat: 'png',
+      quality: 95,
+    })
+  }
+
+  const handleCancel = () => {
+    cancelExtraction()
+    setExtractionStarted(false)
+  }
+
   return (
     <div className="min-h-screen p-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Workspace</h1>
+          <div className="flex items-center gap-4 mb-4">
+            <Button variant="flat" size="sm" as={Link} to="/">
+              ← Back
+            </Button>
+            <h1 className="text-3xl font-bold">Workspace</h1>
+          </div>
           <p className="text-muted-foreground">
-            Import videos and start processing
+            Import videos and extract frames
           </p>
         </header>
 
-        <Card className="p-12 text-center" isHoverable>
-          <div className="max-w-md mx-auto">
-            <div className="text-6xl mb-4">📁</div>
-            <h2 className="text-xl font-semibold mb-2">
-              Drop your video here
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Support for MP4, MOV, AVI, MKV, WebM up to 500MB
-            </p>
-            <Button size="lg">
-              Select Video
-            </Button>
-          </div>
-        </Card>
+        {/* Main content */}
+        <div className="space-y-6">
+          {/* Video Import Section */}
+          {!file ? (
+            <VideoDropZone onFileSelected={handleFileSelected} />
+          ) : (
+            <VideoPreview onRemove={() => setExtractionStarted(false)} />
+          )}
 
-        <div className="mt-8 flex gap-4">
-          <Button variant="bordered" href="/">
-            ← Back to Home
-          </Button>
+          {/* Extraction Controls */}
+          {file && !extractionStarted && (
+            <Card className="p-6" isHoverable>
+              <h3 className="font-semibold text-lg mb-4">Extraction Settings</h3>
+              
+              <div className="space-y-4">
+                {/* FPS Selection */}
+                <div>
+                  <label className="text-sm font-medium mb-2 block">
+                    Frames per second
+                  </label>
+                  <div className="flex gap-2">
+                    {[0.5, 1, 2, 5, 10].map((fps) => (
+                      <Button
+                        key={fps}
+                        variant={fps === 1 ? 'solid' : 'bordered'}
+                        size="sm"
+                      >
+                        {fps} FPS
+                      </Button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Higher FPS = more frames, larger file size
+                  </p>
+                </div>
+
+                {/* Output Format */}
+                <div>
+                  <label className="text-sm font-medium mb-2 block">
+                    Output format
+                  </label>
+                  <div className="flex gap-2">
+                    {['PNG', 'JPEG', 'WebP'].map((format) => (
+                      <Button
+                        key={format}
+                        variant={format === 'PNG' ? 'solid' : 'bordered'}
+                        size="sm"
+                      >
+                        {format}
+                      </Button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    PNG = Best quality, JPEG = Smaller size, WebP = Web optimized
+                  </p>
+                </div>
+
+                {/* Start button */}
+                <div className="pt-4">
+                  <Button 
+                    size="lg" 
+                    color="primary"
+                    onClick={handleStartExtraction}
+                    className="w-full"
+                  >
+                    🎬 Start Extraction
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Extraction Progress */}
+          {extractionStarted && (
+            <ExtractionProgress
+              onCancel={handleCancel}
+              onPause={pauseExtraction}
+              onResume={resumeExtraction}
+            />
+          )}
         </div>
       </div>
     </div>

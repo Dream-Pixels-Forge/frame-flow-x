@@ -1,7 +1,7 @@
-import { Card, CardBody, CardHeader, CardFooter } from '@heroui/react'
+import { Card as HeroUICard, CardProps as HeroUICardProps } from '@heroui/react'
 import { cn } from '@/utils'
 
-interface CardProps {
+interface CardComponentProps extends HeroUICardProps {
   children: React.ReactNode
   header?: React.ReactNode
   footer?: React.ReactNode
@@ -16,21 +16,23 @@ export function CardComponent({
   footer,
   className,
   isHoverable = false,
-  shadow = 'md'
-}: CardProps) {
+  shadow = 'md',
+  ...props
+}: CardComponentProps) {
   return (
-    <Card 
+    <HeroUICard 
       isHoverable={isHoverable} 
       shadow={shadow}
       className={cn('p-0', className)}
+      {...props}
     >
       {header && (
-        <CardHeader>{header}</CardHeader>
+        <div className="px-6 py-4 border-b border-border">{header}</div>
       )}
-      <CardBody>{children}</CardBody>
+      <div className="p-6">{children}</div>
       {footer && (
-        <CardFooter>{footer}</CardFooter>
+        <div className="px-6 py-4 border-t border-border bg-secondary/50">{footer}</div>
       )}
-    </Card>
+    </HeroUICard>
   )
 }
