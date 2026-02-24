@@ -148,12 +148,56 @@ frame-flow-x/
 
 ## Contributing
 
-Contributions are welcome! Please read our contributing guidelines before submitting PRs.
+Contributions are welcome! Please read our [contributing guidelines](.github/CONTRIBUTING.md) before submitting PRs.
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+This project was built with the assistance of AI-powered development tools and open-source libraries:
+
+### AI Development Tools
+
+- **[QwenLM](https://github.com/QwenLM/Qwen)** - Advanced AI language model by Alibaba Cloud
+- **[Qwen-Coder CLI](https://github.com/QwenLM/qwen-coder)** - AI-powered coding assistant
+- **[web-dev-strategy Extension](https://github.com/QwenLM/qwen-coder/tree/main/extensions/web-dev-strategy)** - Multi-agent development system for orchestrating AI agents in web development workflows
+  - Used for project initialization, planning, and task organization
+  - Coordinated specialized agents for market analysis, PRD creation, and implementation planning
+
+### Core Technologies
+
+- **[React](https://react.dev/)** - The library for web and native user interfaces
+- **[TypeScript](https://www.typescriptlang.org/)** - JavaScript with syntax for types
+- **[Vite](https://vitejs.dev/)** - Next generation frontend tooling
+- **[HeroUI](https://www.heroui.com/)** - Beautiful, fast, modern React UI library
+- **[Zustand](https://zustand-demo.pmnd.rs/)** - Bear necessities for state management
+- **[Electron](https://www.electronjs.org/)** - Build cross-platform desktop apps with JavaScript, HTML, and CSS
+- **[Framer Motion](https://www.framer.com/motion/)** - A production-ready motion library for React
+- **[React Router](https://reactrouter.com/)** - Declarative routing for React
+
+### Development & Testing
+
+- **[Vitest](https://vitest.dev/)** - Blazing fast unit test framework
+- **[Playwright](https://playwright.dev/)** - Reliable end-to-end testing for modern web apps
+- **[ESLint](https://eslint.org/)** - Find and fix problems in your JavaScript code
+- **[Prettier](https://prettier.io/)** - An opinionated code formatter
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks made easy
+
+### Build & Distribution
+
+- **[pnpm](https://pnpm.io/)** - Fast, disk space efficient package manager
+- **[electron-builder](https://www.electron.build/)** - A complete solution to package and build Electron apps
+
+### Research & Inspiration
+
+- **[FFmpeg](https://ffmpeg.org/)** - A complete, cross-platform solution for video processing
+- **[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - AI-based image/video super-resolution
+- **[Replicate](https://replicate.com/)** - Run machine learning models in the cloud
 
 ---
 
 **Frame Flow X** - Transform your videos into cinematic frame sequences.
+
+Made with ❤️ using AI-assisted development
