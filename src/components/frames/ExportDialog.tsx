@@ -146,7 +146,6 @@ export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
             <div className="space-y-4">
               <Progress
                 value={progress.percentage}
-                showValue
                 size="lg"
                 color="primary"
               />

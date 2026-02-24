@@ -82,17 +82,15 @@ export function HomePage() {
         <section className="mb-16">
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Processing Demo</h3>
-            <Progress 
-              label="Extraction Progress" 
-              value={45} 
-              showValue
+            <Progress
+              label="Extraction Progress"
+              value={45}
               className="mb-4"
             />
-            <Progress 
-              label="Upscaling" 
-              value={72} 
+            <Progress
+              label="Upscaling"
+              value={72}
               color="secondary"
-              showValue
             />
           </Card>
         </section>

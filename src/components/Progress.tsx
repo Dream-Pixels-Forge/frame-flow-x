@@ -1,31 +1,34 @@
-import { Progress as HeroUIProgress, ProgressProps } from '@heroui/react'
+import { Progress as HeroUIProgress } from '@heroui/react'
 import { cn } from '@/utils'
 
-interface ProgressPropsExtended extends ProgressProps {
+interface ProgressProps {
   label?: string
-  showValue?: boolean
+  value?: number
   size?: 'sm' | 'md' | 'lg'
   color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
+  className?: string
+  maxValue?: number
+  minValue?: number
 }
 
 export function Progress({
   label,
-  showValue = true,
+  value = 0,
   size = 'md',
   color = 'primary',
   className,
-  ...props
-}: ProgressPropsExtended) {
+  maxValue = 100,
+  minValue = 0,
+}: ProgressProps) {
   return (
     <HeroUIProgress
       label={label}
-      showValue={showValue}
+      value={value}
+      maxValue={maxValue}
+      minValue={minValue}
       size={size}
       color={color}
       className={cn('w-full', className)}
-      {...props}
-      // HeroUI v2 expects show-value as boolean, not string
-      aria-valuetext={showValue ? `${props.value || 0}%` : undefined}
     />
   )
 }

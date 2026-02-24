@@ -60,7 +60,6 @@ export function ExtractionProgress({ onCancel, onPause, onResume, className }: E
       <div className="mb-4">
         <Progress 
           value={progress.percentage} 
-          showValue
           size="lg"
           color={
             progress.status === 'error' ? 'danger' :

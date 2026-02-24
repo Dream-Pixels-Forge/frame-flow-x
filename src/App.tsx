@@ -10,19 +10,24 @@ import { ROUTES } from '@/config'
 export function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Routes>
-          <Route 
-            path={ROUTES.HOME} 
-            element={<Layout currentRoute={ROUTES.HOME}><HomePage /></Layout>} 
+          <Route
+            path={ROUTES.HOME}
+            element={<Layout currentRoute={ROUTES.HOME}><HomePage /></Layout>}
           />
-          <Route 
-            path={ROUTES.WORKSPACE} 
-            element={<Layout currentRoute={ROUTES.WORKSPACE}><WorkspacePage /></Layout>} 
+          <Route
+            path={ROUTES.WORKSPACE}
+            element={<Layout currentRoute={ROUTES.WORKSPACE}><WorkspacePage /></Layout>}
           />
-          <Route 
-            path={ROUTES.SETTINGS} 
-            element={<Layout currentRoute={ROUTES.SETTINGS}><SettingsPage /></Layout>} 
+          <Route
+            path={ROUTES.SETTINGS}
+            element={<Layout currentRoute={ROUTES.SETTINGS}><SettingsPage /></Layout>}
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

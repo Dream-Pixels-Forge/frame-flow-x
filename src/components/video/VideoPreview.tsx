@@ -107,7 +107,7 @@ export function VideoPreview({ onRemove, onEdit, className }: VideoPreviewProps)
                 <span className="text-muted-foreground">Loading...</span>
                 <span className="text-muted-foreground">{uploadProgress}%</span>
               </div>
-              <Progress value={uploadProgress} showValue={false} size="sm" />
+              <Progress value={uploadProgress} size="sm" />
             </div>
           )}
 
