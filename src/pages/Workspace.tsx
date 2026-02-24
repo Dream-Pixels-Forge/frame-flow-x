@@ -2,23 +2,57 @@ import { useState, useEffect } from 'react'
 import { Button, Card } from '@/components'
 import { VideoDropZone, VideoPreview, ExtractionProgress } from '@/components/video'
 import { FrameGallery } from '@/components/frames'
+import { UpscalePanel, EnhancementPanel, BeforeAfterComparison } from '@/components/ai'
 import { useVideoImportStore } from '@/stores/videoImportStore'
 import { useFrameExtractionStore } from '@/stores/frameExtractionStore'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
+import { useAIStore } from '@/stores/aiStore'
+import { ExtractedFrame } from '@/utils/frameExtractor'
 import { Link } from 'react-router-dom'
+
+type WorkspaceTab = 'gallery' | 'upscale' | 'enhance' | 'compare'
 
 export function WorkspacePage() {
   const [showGallery, setShowGallery] = useState(false)
+  const [activeTab, setActiveTab] = useState<WorkspaceTab>('gallery')
+  const [selectedFrame, setSelectedFrame] = useState<ExtractedFrame | null>(null)
+  const [originalFrame, setOriginalFrame] = useState<Blob | null>(null)
+  const [processedFrame, setProcessedFrame] = useState<Blob | null>(null)
+  
   const file = useVideoImportStore((state) => state.file)
   const isExtracting = useFrameExtractionStore((state) => state.isExtracting)
   const extractionComplete = useFrameExtractionStore((state) => 
     state.progress.status === 'completed'
   )
   
+  const frames = useFrameGalleryStore((state) => state.frames)
+  const selectedFrameIds = useFrameGalleryStore((state) => state.selectedFrameIds)
+  
   const startExtraction = useFrameExtractionStore((state) => state.startExtraction)
   const pauseExtraction = useFrameExtractionStore((state) => state.pauseExtraction)
   const resumeExtraction = useFrameExtractionStore((state) => state.resumeExtraction)
   const cancelExtraction = useFrameExtractionStore((state) => state.cancelExtraction)
+
+  // Initialize AI service
+  const initializeAI = useAIStore((state) => state.initialize)
+  useEffect(() => {
+    initializeAI()
+  }, [initializeAI])
+
+  // Update selected frame when gallery selection changes
+  useEffect(() => {
+    if (selectedFrameIds.length > 0 && frames.length > 0) {
+      const selectedId = selectedFrameIds[0]
+      const frame = frames.find(f => f.id === selectedId)
+      if (frame) {
+        setSelectedFrame(frame)
+        // Store original frame data for comparison
+        if (!originalFrame && frame.data) {
+          setOriginalFrame(frame.data)
+        }
+      }
+    }
+  }, [selectedFrameIds, frames])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -64,6 +98,23 @@ export function WorkspacePage() {
     setShowGallery(false)
   }
 
+  const handleUpscaleResult = (result: Blob | string) => {
+    const blob = result instanceof Blob ? result : new Blob([result])
+    setProcessedFrame(blob)
+    setActiveTab('compare')
+  }
+
+  const handleEnhanceResult = (result: Blob | string) => {
+    const blob = result instanceof Blob ? result : new Blob([result])
+    setProcessedFrame(blob)
+    setActiveTab('compare')
+  }
+
+  const handleResetProcessing = () => {
+    setProcessedFrame(null)
+    setOriginalFrame(null)
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -76,7 +127,7 @@ export function WorkspacePage() {
             <div>
               <h1 className="text-2xl font-bold">Workspace</h1>
               <p className="text-sm text-muted-foreground">
-                Import videos and extract frames
+                Import videos, extract frames, and apply AI enhancements
               </p>
             </div>
           </div>
@@ -194,8 +245,187 @@ export function WorkspacePage() {
               )}
             </div>
           ) : (
-            /* Gallery View */
-            <FrameGallery />
+            /* Gallery + AI Tools View */
+            <div className="space-y-6">
+              {/* Tabs */}
+              <div className="flex gap-2 border-b pb-2">
+                <Button
+                  variant={activeTab === 'gallery' ? 'solid' : 'bordered'}
+                  size="sm"
+                  onClick={() => setActiveTab('gallery')}
+                >
+                  📷 Gallery
+                </Button>
+                <Button
+                  variant={activeTab === 'upscale' ? 'solid' : 'bordered'}
+                  size="sm"
+                  onClick={() => setActiveTab('upscale')}
+                >
+                  ✨ AI Upscale
+                </Button>
+                <Button
+                  variant={activeTab === 'enhance' ? 'solid' : 'bordered'}
+                  size="sm"
+                  onClick={() => setActiveTab('enhance')}
+                >
+                  🎨 Enhance
+                </Button>
+                <Button
+                  variant={activeTab === 'compare' ? 'solid' : 'bordered'}
+                  size="sm"
+                  onClick={() => setActiveTab('compare')}
+                  disabled={!processedFrame}
+                >
+                  🔍 Compare
+                </Button>
+              </div>
+
+              {/* Tab Content */}
+              {activeTab === 'gallery' && (
+                <div className="h-[70vh]">
+                  <FrameGallery />
+                </div>
+              )}
+
+              {activeTab === 'upscale' && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  <UpscalePanel 
+                    image={selectedFrame?.data || null}
+                    onResult={handleUpscaleResult}
+                  />
+                  <Card className="p-6">
+                    <h3 className="font-semibold mb-4">Instructions</h3>
+                    <ol className="space-y-3 text-sm text-muted-foreground">
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">1.</span>
+                        Select a frame from the gallery
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">2.</span>
+                        Choose upscale factor (2x or 4x)
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">3.</span>
+                        Select quality preset
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">4.</span>
+                        Click "Upscale" to process
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">5.</span>
+                        View result in Compare tab
+                      </li>
+                    </ol>
+                    {selectedFrame ? (
+                      <div className="mt-6 p-4 bg-success/10 border border-success/20 rounded-lg">
+                        <p className="text-sm text-success">
+                          ✅ Frame #{frames.findIndex(f => f.id === selectedFrame.id) + 1} selected
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="mt-6 p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                        <p className="text-sm text-warning">
+                          ⚠️ No frame selected. Please select a frame from the gallery.
+                        </p>
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              )}
+
+              {activeTab === 'enhance' && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  <EnhancementPanel 
+                    image={selectedFrame?.data || null}
+                    onResult={handleEnhanceResult}
+                  />
+                  <Card className="p-6">
+                    <h3 className="font-semibold mb-4">Enhancement Guide</h3>
+                    <ol className="space-y-3 text-sm text-muted-foreground">
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">1.</span>
+                        Select a frame from the gallery
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">2.</span>
+                        Adjust noise reduction (0-100%)
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">3.</span>
+                        Adjust sharpening (0-100%)
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">4.</span>
+                        Fine-tune brightness, contrast, saturation
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="font-bold text-primary">5.</span>
+                        Click "Apply Enhancements"
+                      </li>
+                    </ol>
+                    {selectedFrame ? (
+                      <div className="mt-6 p-4 bg-success/10 border border-success/20 rounded-lg">
+                        <p className="text-sm text-success">
+                          ✅ Frame #{frames.findIndex(f => f.id === selectedFrame.id) + 1} selected
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="mt-6 p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                        <p className="text-sm text-warning">
+                          ⚠️ No frame selected. Please select a frame from the gallery.
+                        </p>
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              )}
+
+              {activeTab === 'compare' && processedFrame && originalFrame && (
+                <div className="space-y-6">
+                  <BeforeAfterComparison
+                    beforeImage={originalFrame}
+                    afterImage={processedFrame}
+                  />
+                  <div className="flex justify-center gap-4">
+                    <Button
+                      variant="bordered"
+                      onClick={handleResetProcessing}
+                    >
+                      🔄 Reset
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        // Download processed frame
+                        const link = document.createElement('a')
+                        link.href = URL.createObjectURL(processedFrame)
+                        link.download = `frame-flow-x-processed-${Date.now()}.png`
+                        link.click()
+                      }}
+                    >
+                      📥 Download Result
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'compare' && !processedFrame && (
+                <Card className="p-12 text-center">
+                  <div className="text-6xl mb-4">🔍</div>
+                  <h3 className="text-xl font-semibold mb-2">No Processed Frame</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Upscale or enhance a frame first to see the comparison
+                  </p>
+                  <Button
+                    color="primary"
+                    onClick={() => setActiveTab('upscale')}
+                  >
+                    Go to Upscale →
+                  </Button>
+                </Card>
+              )}
+            </div>
           )}
         </div>
       </main>
