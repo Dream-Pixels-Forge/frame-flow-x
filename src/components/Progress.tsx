@@ -8,13 +8,13 @@ interface ProgressPropsExtended extends ProgressProps {
   color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
 }
 
-export function Progress({ 
+export function Progress({
   label,
   showValue = true,
   size = 'md',
   color = 'primary',
   className,
-  ...props 
+  ...props
 }: ProgressPropsExtended) {
   return (
     <HeroUIProgress
@@ -24,6 +24,8 @@ export function Progress({
       color={color}
       className={cn('w-full', className)}
       {...props}
+      // HeroUI v2 expects show-value as boolean, not string
+      aria-valuetext={showValue ? `${props.value || 0}%` : undefined}
     />
   )
 }
