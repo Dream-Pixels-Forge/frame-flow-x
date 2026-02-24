@@ -5,6 +5,7 @@
   "description": "Video-to-Frame Processing Application with AI-Powered Upscaling and Cinematic Enhancement",
   "author": "Frame Flow X Team",
   "license": "MIT",
+  "main": "electron/main.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/your-org/frame-flow-x.git"
@@ -23,7 +24,12 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "electron:dev": "concurrently \"pnpm dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "pnpm build && electron-builder",
+    "electron:build:win": "pnpm build && electron-builder --win",
+    "electron:build:mac": "pnpm build && electron-builder --mac",
+    "electron:build:linux": "pnpm build && electron-builder --linux"
   },
   "dependencies": {
     "@heroui/react": "^2.6.14",
