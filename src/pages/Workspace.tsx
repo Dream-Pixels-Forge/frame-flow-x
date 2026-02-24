@@ -5,12 +5,11 @@ import { FrameGallery } from '@/components/frames'
 import { UpscalePanel, EnhancementPanel, BeforeAfterComparison } from '@/components/ai'
 import { 
   ArrowLeftIcon, 
+  ArrowRightIcon,
   SparklesIcon, 
   PaletteIcon, 
   SearchIcon,
   CameraIcon,
-  CheckCircleIcon,
-  AlertTriangleIcon,
   RefreshIcon,
   DownloadIcon,
 } from '@/components/icons'
