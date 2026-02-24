@@ -202,12 +202,12 @@ export const CINEMATIC_PRESETS = {
 } as const
 
 export const PRESET_CATEGORIES = [
-  { id: 'warm', name: 'Warm', icon: '☀️' },
-  { id: 'cool', name: 'Cool', icon: '❄️' },
-  { id: 'bw', name: 'Black & White', icon: '⚫' },
-  { id: 'vintage', name: 'Vintage', icon: '📼' },
-  { id: 'modern', name: 'Modern', icon: '✨' },
-  { id: 'other', name: 'Other', icon: '🎨' },
+  { id: 'warm', name: 'Warm', icon: 'sun' },
+  { id: 'cool', name: 'Cool', icon: 'snowflake' },
+  { id: 'bw', name: 'Black & White', icon: 'circle' },
+  { id: 'vintage', name: 'Vintage', icon: 'film' },
+  { id: 'modern', name: 'Modern', icon: 'sparkles' },
+  { id: 'other', name: 'Other', icon: 'palette' },
 ] as const
 
 export type PresetId = keyof typeof CINEMATIC_PRESETS

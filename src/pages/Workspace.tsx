@@ -3,6 +3,17 @@ import { Button, Card } from '@/components'
 import { VideoDropZone, VideoPreview, ExtractionProgress } from '@/components/video'
 import { FrameGallery } from '@/components/frames'
 import { UpscalePanel, EnhancementPanel, BeforeAfterComparison } from '@/components/ai'
+import { 
+  ArrowLeftIcon, 
+  SparklesIcon, 
+  PaletteIcon, 
+  SearchIcon,
+  CameraIcon,
+  CheckCircleIcon,
+  AlertTriangleIcon,
+  RefreshIcon,
+  DownloadIcon,
+} from '@/components/icons'
 import { useVideoImportStore } from '@/stores/videoImportStore'
 import { useFrameExtractionStore } from '@/stores/frameExtractionStore'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
@@ -122,7 +133,7 @@ export function WorkspacePage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="flat" size="sm" as={Link} to="/">
-              ← Back
+              <ArrowLeftIcon size={16} /> Back
             </Button>
             <div>
               <h1 className="text-2xl font-bold">Workspace</h1>
@@ -214,7 +225,7 @@ export function WorkspacePage() {
                         onClick={handleStartExtraction}
                         className="w-full"
                       >
-                        🎬 Start Extraction
+                        <SparklesIcon size={18} className="mr-2" /> Start Extraction
                       </Button>
                     </div>
                   </div>
@@ -239,7 +250,7 @@ export function WorkspacePage() {
                     color="primary"
                     onClick={() => setShowGallery(true)}
                   >
-                    View Frames →
+                    View Frames <ArrowRightIcon size={18} className="ml-2" />
                   </Button>
                 </div>
               )}
@@ -254,21 +265,21 @@ export function WorkspacePage() {
                   size="sm"
                   onClick={() => setActiveTab('gallery')}
                 >
-                  📷 Gallery
+                  <CameraIcon size={16} className="mr-2" /> Gallery
                 </Button>
                 <Button
                   variant={activeTab === 'upscale' ? 'solid' : 'bordered'}
                   size="sm"
                   onClick={() => setActiveTab('upscale')}
                 >
-                  ✨ AI Upscale
+                  <SparklesIcon size={16} className="mr-2" /> AI Upscale
                 </Button>
                 <Button
                   variant={activeTab === 'enhance' ? 'solid' : 'bordered'}
                   size="sm"
                   onClick={() => setActiveTab('enhance')}
                 >
-                  🎨 Enhance
+                  <PaletteIcon size={16} className="mr-2" /> Enhance
                 </Button>
                 <Button
                   variant={activeTab === 'compare' ? 'solid' : 'bordered'}
@@ -276,7 +287,7 @@ export function WorkspacePage() {
                   onClick={() => setActiveTab('compare')}
                   disabled={!processedFrame}
                 >
-                  🔍 Compare
+                  <SearchIcon size={16} className="mr-2" /> Compare
                 </Button>
               </div>
 
@@ -392,7 +403,7 @@ export function WorkspacePage() {
                       variant="bordered"
                       onClick={handleResetProcessing}
                     >
-                      🔄 Reset
+                      <RefreshIcon size={16} className="mr-2" /> Reset
                     </Button>
                     <Button
                       color="primary"
@@ -404,7 +415,7 @@ export function WorkspacePage() {
                         link.click()
                       }}
                     >
-                      📥 Download Result
+                      <DownloadIcon size={16} className="mr-2" /> Download Result
                     </Button>
                   </div>
                 </div>
@@ -412,7 +423,7 @@ export function WorkspacePage() {
 
               {activeTab === 'compare' && !processedFrame && (
                 <Card className="p-12 text-center">
-                  <div className="text-6xl mb-4">🔍</div>
+                  <div className="text-6xl mb-4"><SearchIcon size={64} className="mx-auto" /></div>
                   <h3 className="text-xl font-semibold mb-2">No Processed Frame</h3>
                   <p className="text-muted-foreground mb-4">
                     Upscale or enhance a frame first to see the comparison
@@ -421,7 +432,7 @@ export function WorkspacePage() {
                     color="primary"
                     onClick={() => setActiveTab('upscale')}
                   >
-                    Go to Upscale →
+                    Go to Upscale <ArrowRightIcon size={16} className="ml-2" />
                   </Button>
                 </Card>
               )}

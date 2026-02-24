@@ -91,11 +91,11 @@ export function formatVideoResolution(width: number, height: number): string {
 
 export function getVideoIcon(format: string): string {
   const icons: Record<string, string> = {
-    mp4: '🎬',
-    webm: '🌐',
-    mov: '🍎',
-    avi: '📼',
-    mkv: '🎞️',
+    mp4: 'video',
+    webm: 'video',
+    mov: 'video',
+    avi: 'video',
+    mkv: 'video',
   }
-  return icons[format.toLowerCase()] || '🎥'
+  return icons[format.toLowerCase()] || 'video'
 }
