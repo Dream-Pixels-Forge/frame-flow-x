@@ -29,7 +29,8 @@ Frame Flow X is a web and desktop application that helps users split videos into
 
 ## Project Status
 
-✅ **Phase 1: Foundation** - Initialization Complete (2026-02-24)
+✅ **Phase 1: Foundation** - Complete (2026-02-24)
+📋 **Phase 2: Core Features** - Starting Next
 
 ### Completed
 - [x] Project initialization (README, .gitignore, .env.example)
@@ -38,13 +39,20 @@ Frame Flow X is a web and desktop application that helps users split videos into
 - [x] Product Requirements Document (PRD)
 - [x] Implementation plan with 5 phases
 - [x] Task registry with 250+ detailed tasks
+- [x] Architecture setup (HeroUI, Zustand, React Router)
+- [x] Base component library (13+ HeroUI components)
+- [x] Testing infrastructure (Vitest + Playwright)
+- [x] Research & Planning complete
+  - FFmpeg integration strategy
+  - AI upscaling evaluation
+  - Video format compatibility
+  - Performance benchmarks
 
-### Next Up: Sprint 1.1 - Project Setup (Days 1-5)
-- Initialize Node.js/TypeScript project with Vite
-- Configure ESLint, Prettier, Husky
-- Set up Git repository and branching strategy
-- Install and configure HeroUI v2
-- Set up pnpm as package manager
+### Next Up: Phase 2 - Core Features (Weeks 3-6)
+- Video import with drag-and-drop
+- FFmpeg frame extraction engine
+- Frame gallery with preview
+- Export functionality
 
 ## Quick Links
 
