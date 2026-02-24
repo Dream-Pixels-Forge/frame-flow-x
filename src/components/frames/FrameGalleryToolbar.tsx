@@ -1,12 +1,16 @@
+import { useState } from 'react'
 import { Button, Slider, Tabs } from '@/components'
 import { cn } from '@/utils'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
+import { ExportDialog } from '@/components/frames/export'
 
 interface FrameGalleryToolbarProps {
   className?: string
 }
 
 export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
+  const [exportOpen, setExportOpen] = useState(false)
+  
   const viewMode = useFrameGalleryStore((state) => state.viewMode)
   const zoomLevel = useFrameGalleryStore((state) => state.zoomLevel)
   const selectedFrameIds = useFrameGalleryStore((state) => state.selectedFrameIds)
@@ -16,11 +20,6 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
   const selectAllFrames = useFrameGalleryStore((state) => state.selectAllFrames)
   const clearSelection = useFrameGalleryStore((state) => state.clearSelection)
   const clearFrames = useFrameGalleryStore((state) => state.clearFrames)
-
-  const handleExport = () => {
-    // TODO: Implement export functionality
-    console.log('Export selected frames:', selectedFrameIds.length)
-  }
 
   return (
     <div className={cn('flex items-center justify-between p-4 border-b bg-background', className)}>
@@ -76,10 +75,10 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
         <Button
           size="sm"
           variant="bordered"
-          onClick={handleExport}
-          isDisabled={selectedFrameIds.length === 0}
+          onClick={() => setExportOpen(true)}
+          isDisabled={selectedFrameIds.length === 0 && frames.length === 0}
         >
-          📥 Export ({selectedFrameIds.length})
+          📥 Export ({selectedFrameIds.length || frames.length})
         </Button>
         <Button
           size="sm"
@@ -90,6 +89,9 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
           🗑️ Clear All
         </Button>
       </div>
+
+      {/* Export Dialog */}
+      <ExportDialog isOpen={exportOpen} onClose={() => setExportOpen(false)} />
     </div>
   )
 }
