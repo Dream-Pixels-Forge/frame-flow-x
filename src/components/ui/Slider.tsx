@@ -8,12 +8,15 @@ const Slider = React.forwardRef<
     minValue?: number
     maxValue?: number
     step?: number
+    value?: number
+    defaultValue?: number
+    onChange?: (value: number) => void
   }
->(({ className, minValue = 0, maxValue = 100, step = 1, value, defaultValue, onChange, ...props }, ref) => {
-  const initialValue = value !== undefined ? (Array.isArray(value) ? value : [value]) : (defaultValue !== undefined ? (Array.isArray(defaultValue) ? defaultValue : [defaultValue]) : [minValue])
-  const [internalValue, setInternalValue] = React.useState(initialValue)
+>(({ className, minValue, maxValue, step, value, defaultValue, onChange, ...props }, ref) => {
+  const arrayValue = value !== undefined ? [value] : (defaultValue !== undefined ? [defaultValue] : [minValue || 0])
+  const [internalValue, setInternalValue] = React.useState(arrayValue)
   
-  const currentValue = value !== undefined ? (Array.isArray(value) ? value : [value]) : internalValue
+  const currentValue = value !== undefined ? [value] : internalValue
 
   const handleValueChange = (newValue: number[]) => {
     setInternalValue(newValue)

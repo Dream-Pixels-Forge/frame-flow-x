@@ -51,6 +51,8 @@ export function ThemeProvider({
     }
   }
 
+  // Theme toggle function (exported for use in components)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)

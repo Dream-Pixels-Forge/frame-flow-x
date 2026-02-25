@@ -136,7 +136,7 @@ export function UpscalePanel({ image, onResult, className }: UpscalePanelProps) 
           <Slider
             minValue={0}
             maxValue={100}
-            value={progress.percentage}
+            value={[progress.percentage]}
             disabled
             className="w-full"
           />

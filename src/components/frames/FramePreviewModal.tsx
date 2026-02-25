@@ -47,7 +47,7 @@ export function FramePreviewModal({
   if (!frame) return null
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open: boolean) => !open && onClose()}>
       <DialogContent className="max-w-[95vw] w-full h-[90vh] p-0">
         <DialogHeader className="border-b p-4">
           <div className="flex items-center justify-between w-full">

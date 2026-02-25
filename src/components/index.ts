@@ -5,15 +5,15 @@ export { Input } from './Input'
 export { Checkbox } from './Checkbox'
 export { Progress } from './Progress'
 export { 
-  Dialog as Modal,
-  DialogPortal as ModalPortal,
-  DialogTrigger as ModalTrigger,
-  DialogContent as ModalContent,
-  DialogHeader as ModalHeader,
-  DialogFooter as ModalFooter,
-  DialogTitle as ModalTitle,
-  DialogDescription as ModalDescription,
-  DialogClose as ModalClose,
+  Dialog,
+  DialogPortal,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
 } from './Modal'
 export { ThemeProvider } from './ThemeProvider'
 

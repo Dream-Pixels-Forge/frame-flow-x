@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Slider, Tabs } from '@/components'
+import { Button, Slider, Tabs, TabsList, TabsTrigger } from '@/components'
 import { cn } from '@/utils'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
 import { ExportDialog } from '@/components/frames/export'
@@ -25,17 +25,13 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
     <div className={cn('flex items-center justify-between p-4 border-b bg-background', className)}>
       {/* Left section - View modes */}
       <div className="flex items-center gap-4">
-        <Tabs
-          items={[
-            { key: 'grid', title: 'Grid' },
-            { key: 'list', title: 'List' },
-            { key: 'timeline', title: 'Timeline' },
-          ]}
-          selectedKey={viewMode}
-          onSelectionChange={(key: string) => setViewMode(key as 'grid' | 'list' | 'timeline')}
-          variant="bordered"
-          size="sm"
-        />
+        <Tabs value={viewMode} onValueChange={(key: string) => setViewMode(key as 'grid' | 'list' | 'timeline')}>
+          <TabsList>
+            <TabsTrigger value="grid">Grid</TabsTrigger>
+            <TabsTrigger value="list">List</TabsTrigger>
+            <TabsTrigger value="timeline">Timeline</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
         {/* Zoom slider */}
         <div className="flex items-center gap-2 ml-4">
@@ -45,7 +41,7 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
             maxValue={200}
             step={25}
             value={[zoomLevel]}
-            onChange={(value) => setZoomLevel(value[0])}
+            onChange={(value: number[]) => setZoomLevel(value[0])}
             className="w-32"
           />
           <span className="text-sm w-10 text-right">{zoomLevel}%</span>
@@ -91,7 +87,7 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
       </div>
 
       {/* Export Dialog */}
-      <ExportDialog open={exportOpen} onOpenChange={(open) => setExportOpen(open)} />
+      <ExportDialog isOpen={exportOpen} onClose={() => setExportOpen(false)} />
     </div>
   )
 }

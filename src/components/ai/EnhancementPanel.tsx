@@ -1,17 +1,15 @@
 import { useState } from 'react'
-import { Card, Button, Slider } from '@/components'
-import { cn } from '@/utils'
+import { Button, Card, Slider, Badge } from '@/components'
 import { useAIStore } from '@/stores/aiStore'
-import { EnhancementOptions } from '@/services/aiService'
 
 interface EnhancementPanelProps {
-  image: Blob | string | null
+  image?: Blob | null
   onResult?: (result: Blob | string) => void
-  className?: string
 }
 
-export function EnhancementPanel({ image, onResult, className }: EnhancementPanelProps) {
-  const [options, setOptions] = useState<EnhancementOptions>({
+export function EnhancementPanel({ image, onResult }: EnhancementPanelProps) {
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [options, setOptions] = useState({
     noiseReduction: 0,
     sharpening: 0,
     brightness: 0,
@@ -19,57 +17,34 @@ export function EnhancementPanel({ image, onResult, className }: EnhancementPane
     saturation: 0,
   })
 
-  const isProcessing = useAIStore((state) => state.isProcessing)
-  const progress = useAIStore((state) => state.progress)
-  const result = useAIStore((state) => state.result)
-  
-  const enhance = useAIStore((state) => state.enhance)
-  const cancel = useAIStore((state) => state.cancel)
+  const enhanceImage = useAIStore((state) => state.enhanceImage)
 
-  const handleEnhance = async () => {
-    if (!image) return
-
-    const result = await enhance(image, options)
-
-    if (result.success && result.data) {
-      onResult?.(result.data)
-    }
-  }
-
-  const handleCancel = () => {
-    cancel()
-  }
-
-  const handleReset = () => {
-    setOptions({
-      noiseReduction: 0,
-      sharpening: 0,
-      brightness: 0,
-      contrast: 0,
-      saturation: 0,
-    })
-  }
-
-  const updateOption = (key: keyof EnhancementOptions, value: number) => {
+  const updateOption = (key: string, value: number) => {
     setOptions((prev) => ({ ...prev, [key]: value }))
   }
 
-  if (!image) {
-    return (
-      <Card className={cn('p-6', className)}>
-        <div className="text-center py-8 text-muted-foreground">
-          <p>Select a frame to enhance</p>
-        </div>
-      </Card>
-    )
+  const handleApply = async () => {
+    if (!image) return
+
+    setIsProcessing(true)
+    try {
+      const result = await enhanceImage(image, options)
+      if (result && onResult) {
+        onResult(result)
+      }
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
-    <Card className={cn('p-6', className)}>
-      <h3 className="font-semibold text-lg mb-4">Frame Enhancement</h3>
+    <Card className="p-6" isHoverable>
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="font-semibold text-lg">Enhancement Controls</h3>
+        <Badge>AI Powered</Badge>
+      </div>
 
-      {/* Enhancement controls */}
-      <div className="space-y-4 mb-6">
+      <div className="space-y-6">
         {/* Noise Reduction */}
         <div>
           <div className="flex justify-between mb-2">
@@ -79,8 +54,8 @@ export function EnhancementPanel({ image, onResult, className }: EnhancementPane
           <Slider
             minValue={0}
             maxValue={100}
-            value={options.noiseReduction}
-            onChange={(v) => updateOption('noiseReduction', v as number)}
+            value={[options.noiseReduction]}
+            onChange={(v: number[]) => updateOption('noiseReduction', v[0])}
             disabled={isProcessing}
           />
         </div>
@@ -94,8 +69,8 @@ export function EnhancementPanel({ image, onResult, className }: EnhancementPane
           <Slider
             minValue={0}
             maxValue={100}
-            value={options.sharpening}
-            onChange={(v) => updateOption('sharpening', v as number)}
+            value={[options.sharpening]}
+            onChange={(v: number[]) => updateOption('sharpening', v[0])}
             disabled={isProcessing}
           />
         </div>
@@ -107,10 +82,10 @@ export function EnhancementPanel({ image, onResult, className }: EnhancementPane
             <span className="text-sm text-muted-foreground">{options.brightness}%</span>
           </div>
           <Slider
-            minValue={-50}
-            maxValue={50}
-            value={options.brightness}
-            onChange={(v) => updateOption('brightness', v as number)}
+            minValue={-100}
+            maxValue={100}
+            value={[options.brightness]}
+            onChange={(v: number[]) => updateOption('brightness', v[0])}
             disabled={isProcessing}
           />
         </div>
@@ -122,10 +97,10 @@ export function EnhancementPanel({ image, onResult, className }: EnhancementPane
             <span className="text-sm text-muted-foreground">{options.contrast}%</span>
           </div>
           <Slider
-            minValue={-50}
-            maxValue={50}
-            value={options.contrast}
-            onChange={(v) => updateOption('contrast', v as number)}
+            minValue={-100}
+            maxValue={100}
+            value={[options.contrast]}
+            onChange={(v: number[]) => updateOption('contrast', v[0])}
             disabled={isProcessing}
           />
         </div>
@@ -139,58 +114,41 @@ export function EnhancementPanel({ image, onResult, className }: EnhancementPane
           <Slider
             minValue={-100}
             maxValue={100}
-            value={options.saturation}
-            onChange={(v) => updateOption('saturation', v as number)}
+            value={[options.saturation]}
+            onChange={(v: number[]) => updateOption('saturation', v[0])}
             disabled={isProcessing}
           />
         </div>
-      </div>
 
-      {/* Progress */}
-      {isProcessing && (
-        <div className="mb-6 space-y-3">
-          <Slider
-            minValue={0}
-            maxValue={100}
-            value={progress.percentage}
-            disabled
-            className="w-full"
-          />
-          <div className="flex justify-between text-sm">
-            <span>{progress.message}</span>
-            <span>{progress.percentage.toFixed(0)}%</span>
+        {/* Intensity */}
+        <div>
+          <div className="flex justify-between mb-2">
+            <label className="text-sm font-medium">Effect Intensity</label>
+            <span className="text-sm text-muted-foreground">{options.saturation}%</span>
           </div>
+          <Slider
+            minValue={50}
+            maxValue={200}
+            value={[100]}
+            onChange={() => {}}
+            disabled={isProcessing}
+          />
         </div>
-      )}
 
-      {/* Result */}
-      {result && result.success && (
-        <div className="mb-6 p-3 bg-success/10 border border-success/20 rounded-lg">
-          <p className="text-sm text-success text-center">
-            ✅ Enhancement applied!
+        {/* Apply button */}
+        <Button
+          onClick={handleApply}
+          disabled={!image || isProcessing}
+          className="w-full"
+          size="lg"
+        >
+          {isProcessing ? 'Applying...' : 'Apply Enhancements'}
+        </Button>
+
+        {!image && (
+          <p className="text-sm text-muted-foreground text-center">
+            Select a frame from the gallery to enhance
           </p>
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex gap-2">
-        {!isProcessing ? (
-          <>
-            <Button
-              color="primary"
-              onClick={handleEnhance}
-              className="flex-1"
-            >
-              🎨 Apply Enhancements
-            </Button>
-            <Button variant="flat" onClick={handleReset}>
-              Reset
-            </Button>
-          </>
-        ) : (
-          <Button color="danger" onClick={handleCancel} className="flex-1">
-            Cancel
-          </Button>
         )}
       </div>
     </Card>

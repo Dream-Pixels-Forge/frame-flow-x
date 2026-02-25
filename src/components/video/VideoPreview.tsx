@@ -120,9 +120,7 @@ export function VideoPreview({ onRemove, onEdit, className }: VideoPreviewProps)
 
           {/* Success badge */}
           {!isUploading && !error && (
-            <Badge color="success" size="sm">
-              Ready for processing
-            </Badge>
+            <Badge>Ready for processing</Badge>
           )}
         </div>
       </div>

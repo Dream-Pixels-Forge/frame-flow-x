@@ -84,9 +84,7 @@ export function FrameGrid({ onFrameClick, className }: FrameGridProps) {
             {/* Favorite badge */}
             {isFavorite && (
               <div className="absolute top-2 right-2">
-                <Badge color="warning" size="sm">
-                  ⭐
-                </Badge>
+                <Badge>⭐</Badge>
               </div>
             )}
 
