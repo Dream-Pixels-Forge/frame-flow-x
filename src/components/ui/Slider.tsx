@@ -4,24 +4,30 @@ import { cn } from "@/lib/utils"
 
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+  Omit<React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>, 'value' | 'defaultValue'> & {
     minValue?: number
     maxValue?: number
     step?: number
     value?: number
     defaultValue?: number
-    onChange?: (value: number) => void
+    onValueChange?: (value: number) => void
   }
->(({ className, minValue, maxValue, step, value, defaultValue, onChange, ...props }, ref) => {
-  // Convert single value to array for Radix UI
-  const arrayValue = value !== undefined ? [value] : (defaultValue !== undefined ? [defaultValue] : [minValue || 0])
+>(({ className, minValue, maxValue, step, value, defaultValue, onValueChange, ...props }, ref) => {
+  // Convert single value to array for Radix UI (which requires array)
+  const getValueArray = (val?: number, defVal?: number) => {
+    if (val !== undefined) return [val]
+    if (defVal !== undefined) return [defVal]
+    return [minValue || 0]
+  }
+
+  const arrayValue = getValueArray(value, defaultValue)
   const [internalValue, setInternalValue] = React.useState(arrayValue)
   
-  const currentValue = value !== undefined ? [value] : internalValue
+  const currentValue = value !== undefined ? getValueArray(value) : internalValue
 
   const handleValueChange = (newValue: number[]) => {
     setInternalValue(newValue)
-    onChange?.(newValue[0])
+    onValueChange?.(newValue[0])
   }
 
   return (
@@ -45,6 +51,6 @@ const Slider = React.forwardRef<
     </SliderPrimitive.Root>
   )
 })
-Slider.displayName = SliderPrimitive.Root.displayName
+Slider.displayName = "Slider"
 
 export { Slider }

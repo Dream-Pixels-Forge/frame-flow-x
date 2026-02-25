@@ -42,7 +42,7 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
             maxValue={200}
             step={25}
             value={zoomLevel}
-            onChange={(value) => setZoomLevel(value)}
+            onValueChange={(value) => setZoomLevel(Array.isArray(value) ? value[0] : value)}
             className="w-32"
           />
           <span className="text-sm w-10 text-right">{zoomLevel}%</span>

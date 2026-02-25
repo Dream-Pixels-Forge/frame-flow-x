@@ -56,7 +56,7 @@ export function EnhancementPanel({ image, onResult }: EnhancementPanelProps) {
             minValue={0}
             maxValue={100}
             value={options.noiseReduction}
-            onChange={(v) => updateOption('noiseReduction', v)}
+            onValueChange={(v) => updateOption('noiseReduction', Array.isArray(v) ? v[0] : v)}
             disabled={isProcessing}
           />
         </div>
@@ -72,7 +72,7 @@ export function EnhancementPanel({ image, onResult }: EnhancementPanelProps) {
             minValue={0}
             maxValue={100}
             value={options.sharpening}
-            onChange={(v) => updateOption('sharpening', v)}
+            onValueChange={(v) => updateOption('sharpening', Array.isArray(v) ? v[0] : v)}
             disabled={isProcessing}
           />
         </div>
@@ -88,7 +88,7 @@ export function EnhancementPanel({ image, onResult }: EnhancementPanelProps) {
             minValue={-100}
             maxValue={100}
             value={options.brightness}
-            onChange={(v) => updateOption('brightness', v)}
+            onValueChange={(v) => updateOption('brightness', Array.isArray(v) ? v[0] : v)}
             disabled={isProcessing}
           />
         </div>
@@ -104,7 +104,7 @@ export function EnhancementPanel({ image, onResult }: EnhancementPanelProps) {
             minValue={-100}
             maxValue={100}
             value={options.contrast}
-            onChange={(v) => updateOption('contrast', v)}
+            onValueChange={(v) => updateOption('contrast', Array.isArray(v) ? v[0] : v)}
             disabled={isProcessing}
           />
         </div>
@@ -120,7 +120,7 @@ export function EnhancementPanel({ image, onResult }: EnhancementPanelProps) {
             minValue={-100}
             maxValue={100}
             value={options.saturation}
-            onChange={(v) => updateOption('saturation', v)}
+            onValueChange={(v) => updateOption('saturation', Array.isArray(v) ? v[0] : v)}
             disabled={isProcessing}
           />
         </div>
