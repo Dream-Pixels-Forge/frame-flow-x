@@ -70,3 +70,5 @@ video_cache/
 *.asar
 *.unpacked
 release/ 
+
+QWEN.md
