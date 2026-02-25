@@ -38,15 +38,14 @@ export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      size="lg"
-      title="Export Frames"
-    >
-      <div className="space-y-6">
-        {/* Export Settings */}
-        {!isExporting && !result && (
+    <Modal open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Export Frames</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6">
+          {/* Export Settings */}
+          {!isExporting && !result && (
           <>
             <Card isHoverable>
               <h3 className="font-semibold mb-4">Export Settings</h3>
@@ -144,11 +143,7 @@ export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
             <h3 className="font-semibold mb-4">Exporting...</h3>
             
             <div className="space-y-4">
-              <Progress
-                value={progress.percentage}
-                size="lg"
-                color="primary"
-              />
+              <Progress value={progress.percentage} />
               
               <div className="flex justify-between text-sm">
                 <span>{progress.message}</span>
@@ -219,6 +214,7 @@ export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
           </Card>
         )}
       </div>
+      </DialogContent>
     </Modal>
   )
 }

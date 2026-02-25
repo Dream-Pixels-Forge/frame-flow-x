@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Modal, Button, Badge } from '@/components'
+import { useState, useEffect } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, Button, Badge } from '@/components'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
 import { ExtractedFrame } from '@/utils/frameExtractor'
 
@@ -27,77 +27,56 @@ export function FramePreviewModal({
   const isSelected = frame ? selectedFrameIds.includes(frame.id) : false
   const isFavorite = frame ? favoriteFrameIds.includes(frame.id) : false
 
-  const handlePrev = () => {
-    navigateFrames('prev')
-  }
-
-  const handleNext = () => {
-    navigateFrames('next')
-  }
+  const handlePrev = () => navigateFrames('prev')
+  const handleNext = () => navigateFrames('next')
 
   // Keyboard navigation
-  useState(() => {
+  useEffect(() => {
+    if (!isOpen) return
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return
-      
-      if (e.key === 'ArrowLeft') {
-        handlePrev()
-      } else if (e.key === 'ArrowRight') {
-        handleNext()
-      } else if (e.key === 'Escape') {
-        onClose()
-      }
+      if (e.key === 'ArrowLeft') handlePrev()
+      else if (e.key === 'ArrowRight') handleNext()
+      else if (e.key === 'Escape') onClose()
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  })
+  }, [isOpen])
 
   if (!frame) return null
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size="full"
-      isDismissable
-      isKeyboardDismissDisabled={false}
-    >
-      <div className="flex flex-col h-[90vh]">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <div className="flex items-center gap-4">
-            <h3 className="font-semibold text-lg">
-              Frame #{frameIndex + 1}
-            </h3>
-            <Badge color="default" size="sm">
-              {frame.width} x {frame.height}
-            </Badge>
-            <Badge color="default" size="sm">
-              {(frame.timestamp / 1000).toFixed(3)}s
-            </Badge>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-[95vw] w-full h-[90vh] p-0">
+        <DialogHeader className="border-b p-4">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-4">
+              <DialogTitle>Frame #{frameIndex + 1}</DialogTitle>
+              <Badge>{frame.width} x {frame.height}</Badge>
+              <Badge variant="outline">{(frame.timestamp / 1000).toFixed(3)}s</Badge>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={isFavorite ? 'solid' : 'bordered'}
+                size="sm"
+                onClick={() => toggleFavorite(frame.id)}
+              >
+                {isFavorite ? '⭐ Favorite' : '☆ Favorite'}
+              </Button>
+              <Button
+                variant={isSelected ? 'solid' : 'bordered'}
+                size="sm"
+                onClick={() => toggleFrameSelection(frame.id)}
+              >
+                {isSelected ? '✓ Selected' : 'Select'}
+              </Button>
+              <Button variant="ghost" size="sm" onClick={onClose}>
+                ✕ Close
+              </Button>
+            </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="flat"
-              size="sm"
-              onClick={() => toggleFavorite(frame.id)}
-            >
-              {isFavorite ? '⭐ Favorite' : '☆ Favorite'}
-            </Button>
-            <Button
-              variant={isSelected ? 'solid' : 'bordered'}
-              size="sm"
-              onClick={() => toggleFrameSelection(frame.id)}
-            >
-              {isSelected ? '✓ Selected' : 'Select'}
-            </Button>
-            <Button variant="flat" size="sm" onClick={onClose}>
-              ✕ Close
-            </Button>
-          </div>
-        </div>
+        </DialogHeader>
 
         {/* Main content */}
         <div className="flex-1 flex overflow-hidden">
@@ -154,62 +133,48 @@ export function FramePreviewModal({
             </div>
 
             {/* Frame info */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">Info</label>
-              <div className="space-y-2 text-sm">
+            <div className="space-y-2">
+              <h4 className="font-semibold text-sm">Frame Info</h4>
+              <div className="text-xs space-y-1 text-muted-foreground">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Frame #</span>
-                  <span>{frameIndex + 1}</span>
+                  <span>Format:</span>
+                  <span className="text-foreground">{frame.format.toUpperCase()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Timestamp</span>
-                  <span>{(frame.timestamp / 1000).toFixed(3)}s</span>
+                  <span>Size:</span>
+                  <span className="text-foreground">{(frame.size / 1024).toFixed(1)} KB</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Resolution</span>
-                  <span>{frame.width} x {frame.height}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Format</span>
-                  <span className="uppercase">{frame.format}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Size</span>
-                  <span>{(frame.size / 1024).toFixed(1)} KB</span>
+                  <span>Timestamp:</span>
+                  <span className="text-foreground">{(frame.timestamp / 1000).toFixed(3)}s</span>
                 </div>
               </div>
             </div>
 
             {/* Navigation */}
-            <div className="mt-auto">
-              <div className="flex gap-2">
-                <Button
-                  className="flex-1"
-                  onClick={handlePrev}
-                  isDisabled={frameIndex === 0}
-                >
-                  ← Prev
-                </Button>
-                <Button
-                  className="flex-1"
-                  onClick={handleNext}
-                  isDisabled={frameIndex === frames.length - 1}
-                >
-                  Next →
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground text-center mt-2">
-                {frameIndex + 1} of {frames.length} frames
-              </p>
+            <div className="flex gap-2 mt-auto">
+              <Button
+                variant="bordered"
+                size="sm"
+                className="flex-1"
+                onClick={handlePrev}
+                disabled={frameIndex === 0}
+              >
+                ← Prev
+              </Button>
+              <Button
+                variant="bordered"
+                size="sm"
+                className="flex-1"
+                onClick={handleNext}
+                disabled={frameIndex >= frames.length - 1}
+              >
+                Next →
+              </Button>
             </div>
           </div>
         </div>
-
-        {/* Footer with navigation hints */}
-        <div className="p-4 border-t text-center text-sm text-muted-foreground">
-          Use ← → arrow keys to navigate • ESC to close
-        </div>
-      </div>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -1,5 +1,5 @@
 // Core Components
-export { Button } from './Button'
+export { Button, buttonVariants } from './Button'
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './Card'
 export { Input } from './Input'
 export { Checkbox } from './Checkbox'
@@ -19,7 +19,7 @@ export { ThemeProvider } from './ThemeProvider'
 
 // UI Components
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/Tooltip'
-export { Tabs, Tab, TabsList, TabsTrigger, TabsContent } from './ui/Tabs'
+export { Tabs, TabsList, TabsTrigger, Tab, TabsContent } from './ui/Tabs'
 export { Avatar, AvatarImage, AvatarFallback } from './ui/Avatar'
 export { Slider } from './ui/Slider'
 export { Badge, badgeVariants } from './ui/Badge'

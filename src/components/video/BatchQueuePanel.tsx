@@ -177,15 +177,7 @@ function QueueItem({ item, isCurrent, onRemove, onCancel, onPause }: QueueItemPr
       {/* Progress */}
       {(isProcessing || isCompleted) && (
         <div className="space-y-1">
-          <Progress
-            value={item.progress.percentage}
-            size="sm"
-            color={
-              isCompleted ? 'success' :
-              item.status === 'error' ? 'danger' :
-              'primary'
-            }
-          />
+          <Progress value={item.progress.percentage} />
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>{item.progress.message || 'Processing...'}</span>
             <span>{item.progress.percentage.toFixed(0)}%</span>

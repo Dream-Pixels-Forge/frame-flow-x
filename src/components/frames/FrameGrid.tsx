@@ -102,7 +102,8 @@ export function FrameGrid({ onFrameClick, className }: FrameGridProps) {
               }}
             >
               <Checkbox
-                isSelected={isSelected}
+                checked={isSelected}
+                onCheckedChange={() => toggleFrameSelection(frame.id)}
                 className="bg-white rounded"
               />
             </div>

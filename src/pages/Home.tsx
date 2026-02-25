@@ -82,22 +82,14 @@ export function HomePage() {
         <section className="mb-16">
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Processing Demo</h3>
-            <Progress
-              label="Extraction Progress"
-              value={45}
-              className="mb-4"
-            />
-            <Progress
-              label="Upscaling"
-              value={72}
-              color="secondary"
-            />
+            <Progress value={45} className="mb-4" />
+            <Progress value={72} />
           </Card>
         </section>
 
         {/* Footer */}
         <footer className="text-center text-muted-foreground py-8">
-          <p>Frame Flow X v0.1.0 • Built with HeroUI + React + Vite</p>
+          <p>Frame Flow X v0.1.0 • Built with shadcn/ui + Tailwind v4</p>
         </footer>
       </div>
     </div>

@@ -1,43 +1,46 @@
-import { Slider } from '@heroui/react'
-import { cn } from '@/utils'
+import * as React from "react"
+import * as SliderPrimitive from "@radix-ui/react-slider"
+import { cn } from "@/lib/utils"
 
-interface SliderComponentProps {
-  label?: string
-  minValue?: number
-  maxValue?: number
-  step?: number
-  showSteps?: boolean
-  defaultValue?: number | number[]
-  value?: number | number[]
-  onChange?: (value: number | number[]) => void
-  className?: string
-  disabled?: boolean
-}
+const Slider = React.forwardRef<
+  React.ElementRef<typeof SliderPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+    minValue?: number
+    maxValue?: number
+    step?: number
+  }
+>(({ className, minValue = 0, maxValue = 100, step = 1, value, defaultValue, onChange, ...props }, ref) => {
+  const initialValue = value !== undefined ? (Array.isArray(value) ? value : [value]) : (defaultValue !== undefined ? (Array.isArray(defaultValue) ? defaultValue : [defaultValue]) : [minValue])
+  const [internalValue, setInternalValue] = React.useState(initialValue)
+  
+  const currentValue = value !== undefined ? (Array.isArray(value) ? value : [value]) : internalValue
 
-export function SliderComponent({ 
-  label,
-  minValue = 0,
-  maxValue = 100,
-  step = 1,
-  showSteps = false,
-  defaultValue,
-  value,
-  onChange,
-  className,
-  disabled,
-}: SliderComponentProps) {
+  const handleValueChange = (newValue: number[]) => {
+    setInternalValue(newValue)
+    onChange?.(newValue[0])
+  }
+
   return (
-    <Slider
-      label={label}
-      minValue={minValue}
-      maxValue={maxValue}
-      step={step}
-      showSteps={showSteps}
-      defaultValue={defaultValue}
-      value={value}
-      onChange={onChange}
-      className={cn('w-full', className)}
-      isDisabled={disabled}
-    />
+  <SliderPrimitive.Root
+    ref={ref}
+    className={cn(
+      "relative flex w-full touch-none select-none items-center",
+      className
+    )}
+    value={currentValue}
+    onValueChange={handleValueChange}
+    min={minValue}
+    max={maxValue}
+    step={step}
+    {...props}
+  >
+    <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20">
+      <SliderPrimitive.Range className="absolute h-full bg-primary" />
+    </SliderPrimitive.Track>
+    <SliderPrimitive.Thumb className="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" />
+  </SliderPrimitive.Root>
   )
-}
+})
+Slider.displayName = SliderPrimitive.Root.displayName
+
+export { Slider }

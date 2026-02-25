@@ -58,15 +58,7 @@ export function ExtractionProgress({ onCancel, onPause, onResume, className }: E
 
       {/* Progress bar */}
       <div className="mb-4">
-        <Progress 
-          value={progress.percentage} 
-          size="lg"
-          color={
-            progress.status === 'error' ? 'danger' :
-            progress.status === 'completed' ? 'success' :
-            'primary'
-          }
-        />
+        <Progress value={progress.percentage} />
       </div>
 
       {/* Stats */}

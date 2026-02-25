@@ -44,8 +44,8 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
             minValue={50}
             maxValue={200}
             step={25}
-            value={zoomLevel}
-            onChange={(value) => setZoomLevel(value as number)}
+            value={[zoomLevel]}
+            onChange={(value) => setZoomLevel(value[0])}
             className="w-32"
           />
           <span className="text-sm w-10 text-right">{zoomLevel}%</span>
@@ -76,7 +76,7 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
           size="sm"
           variant="bordered"
           onClick={() => setExportOpen(true)}
-          isDisabled={selectedFrameIds.length === 0 && frames.length === 0}
+          disabled={selectedFrameIds.length === 0 && frames.length === 0}
         >
           📥 Export ({selectedFrameIds.length || frames.length})
         </Button>
@@ -91,7 +91,7 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
       </div>
 
       {/* Export Dialog */}
-      <ExportDialog isOpen={exportOpen} onClose={() => setExportOpen(false)} />
+      <ExportDialog open={exportOpen} onOpenChange={(open) => setExportOpen(open)} />
     </div>
   )
 }

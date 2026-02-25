@@ -96,7 +96,7 @@ export function TimelineScrubber({ className }: TimelineScrubberProps) {
           size="sm"
           variant="bordered"
           onClick={() => setSelectedFrameIndex(Math.max(0, selectedFrameIndex - 10))}
-          isDisabled={selectedFrameIndex < 10}
+          disabled={selectedFrameIndex < 10}
         >
           ← -10
         </Button>
@@ -104,7 +104,7 @@ export function TimelineScrubber({ className }: TimelineScrubberProps) {
           size="sm"
           variant="bordered"
           onClick={() => setSelectedFrameIndex(selectedFrameIndex - 1)}
-          isDisabled={selectedFrameIndex < 1}
+          disabled={selectedFrameIndex < 1}
         >
           ← -1
         </Button>
@@ -115,7 +115,7 @@ export function TimelineScrubber({ className }: TimelineScrubberProps) {
           size="sm"
           variant="bordered"
           onClick={() => setSelectedFrameIndex(selectedFrameIndex + 1)}
-          isDisabled={selectedFrameIndex >= frames.length - 1}
+          disabled={selectedFrameIndex >= frames.length - 1}
         >
           +1 →
         </Button>
@@ -123,7 +123,7 @@ export function TimelineScrubber({ className }: TimelineScrubberProps) {
           size="sm"
           variant="bordered"
           onClick={() => setSelectedFrameIndex(selectedFrameIndex + 10)}
-          isDisabled={selectedFrameIndex >= frames.length - 10}
+          disabled={selectedFrameIndex >= frames.length - 10}
         >
           +10 →
         </Button>
