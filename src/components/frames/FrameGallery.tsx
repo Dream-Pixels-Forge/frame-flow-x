@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { FrameGrid, FramePreviewModal, FrameGalleryToolbar, TimelineScrubber } from '@/components/frames'
 import { useFrameExtractionStore } from '@/stores/frameExtractionStore'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
@@ -7,12 +7,16 @@ import { ExtractedFrame } from '@/utils/frameExtractor'
 export function FrameGallery() {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [currentFrameIndex, setCurrentFrameIndex] = useState(-1)
-  
+
   const viewMode = useFrameGalleryStore((state) => state.viewMode)
   const frames = useFrameGalleryStore((state) => state.frames)
-  
+  const selectedFrameIds = useFrameGalleryStore((state) => state.selectedFrameIds)
+
   const extractionFrames = useFrameExtractionStore((state) => state.frames)
   const setFrames = useFrameGalleryStore((state) => state.setFrames)
+  const navigateFrames = useFrameGalleryStore((state) => state.navigateFrames)
+  const selectAllFrames = useFrameGalleryStore((state) => state.selectAllFrames)
+  const clearSelection = useFrameGalleryStore((state) => state.clearSelection)
 
   // Sync frames from extraction store
   useEffect(() => {
@@ -21,17 +25,63 @@ export function FrameGallery() {
     }
   }, [extractionFrames, setFrames])
 
-  const handleFrameClick = (_frame: ExtractedFrame, index: number) => {
+  const handleFrameClick = useCallback((_frame: ExtractedFrame, index: number) => {
     setCurrentFrameIndex(index)
     setPreviewOpen(true)
-  }
+  }, [])
 
-  const handleClosePreview = () => {
+  const handleClosePreview = useCallback(() => {
     setPreviewOpen(false)
-  }
+  }, [])
 
-  const currentFrame = currentFrameIndex >= 0 && currentFrameIndex < frames.length 
-    ? frames[currentFrameIndex] 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in inputs
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      // Navigation shortcuts
+      if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        navigateFrames('next')
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        navigateFrames('prev')
+      }
+      // Selection shortcuts
+      else if (e.key === 'a' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        selectAllFrames()
+      } else if (e.key === 'Escape') {
+        e.preventDefault()
+        clearSelection()
+        if (previewOpen) {
+          handleClosePreview()
+        }
+      }
+      // View shortcuts
+      else if (e.key === 'g' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault()
+        // Could toggle grid view
+      } else if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        // Focus search input (would need ref)
+      }
+      // Delete shortcut
+      else if (e.key === 'Delete' && selectedFrameIds.length > 0) {
+        e.preventDefault()
+        clearSelection()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [frames.length, previewOpen, handleClosePreview, navigateFrames, selectAllFrames, clearSelection, selectedFrameIds.length])
+
+  const currentFrame = currentFrameIndex >= 0 && currentFrameIndex < frames.length
+    ? frames[currentFrameIndex]
     : null
 
   return (
@@ -47,7 +97,9 @@ export function FrameGallery() {
 
         {viewMode === 'list' && (
           <div className="text-center py-20 text-muted-foreground">
-            List view coming soon
+            <div className="text-6xl mb-4">📋</div>
+            <h3 className="text-lg font-semibold mb-2">List View</h3>
+            <p>List view coming soon</p>
           </div>
         )}
 
@@ -70,7 +122,12 @@ export function FrameGallery() {
       {/* Frame count footer */}
       {frames.length > 0 && (
         <div className="border-t p-3 text-center text-sm text-muted-foreground">
-          {frames.length} frames extracted
+          <div className="flex justify-between items-center">
+            <span>{frames.length} frames extracted</span>
+            <span className="text-xs">
+              Keyboard: ← → Navigate • Ctrl+A Select All • Esc Deselect
+            </span>
+          </div>
         </div>
       )}
     </div>

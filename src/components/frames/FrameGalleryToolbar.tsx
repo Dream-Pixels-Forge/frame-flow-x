@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Button, Slider, Tabs, TabsList, TabsTrigger } from '@/components'
-import { cn } from '@/utils'
+import { Button, Slider, Tabs, TabsList, TabsTrigger, Input } from '@/components'
+import { cn } from '@/lib/utils'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
 import { ExportDialog } from '@/components/frames/export'
+import { SearchIcon, FilterIcon } from 'lucide-react'
 
 interface FrameGalleryToolbarProps {
   className?: string
@@ -10,7 +11,9 @@ interface FrameGalleryToolbarProps {
 
 export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
   const [exportOpen, setExportOpen] = useState(false)
-  
+  const [showFilters, setShowFilters] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+
   const viewMode = useFrameGalleryStore((state) => state.viewMode)
   const zoomLevel = useFrameGalleryStore((state) => state.zoomLevel)
   const selectedFrameIds = useFrameGalleryStore((state) => state.selectedFrameIds)
@@ -21,71 +24,122 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
   const clearSelection = useFrameGalleryStore((state) => state.clearSelection)
   const clearFrames = useFrameGalleryStore((state) => state.clearFrames)
 
-  return (
-    <div className={cn('flex items-center justify-between p-4 border-b bg-background', className)}>
-      {/* Left section - View modes */}
-      <div className="flex items-center gap-4">
-        <Tabs value={viewMode} onValueChange={(key: string) => setViewMode(key as 'grid' | 'list' | 'timeline')}>
-          <TabsList>
-            <TabsTrigger value="grid">Grid</TabsTrigger>
-            <TabsTrigger value="list">List</TabsTrigger>
-            <TabsTrigger value="timeline">Timeline</TabsTrigger>
-          </TabsList>
-        </Tabs>
+  // Filter frames based on search query
+  const filteredFrames = frames.filter((frame) => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+    const timestamp = (frame.timestamp / 1000).toFixed(2)
+    return frame.id.toLowerCase().includes(query) || timestamp.includes(query)
+  })
 
-        {/* Zoom slider */}
-        <div className="flex items-center gap-2 ml-4">
-          <span className="text-sm text-muted-foreground w-12">Zoom</span>
-          {/* @ts-ignore - Slider value type */}
-          <Slider
-            minValue={50}
-            maxValue={200}
-            step={25}
-            value={zoomLevel}
-            onValueChange={(value) => setZoomLevel(Array.isArray(value) ? value[0] : value)}
-            className="w-32"
-          />
-          <span className="text-sm w-10 text-right">{zoomLevel}%</span>
+  return (
+    <div className={cn('flex flex-col gap-4 p-4 border-b bg-background', className)}>
+      {/* Top bar - View modes and zoom */}
+      <div className="flex items-center justify-between">
+        {/* Left section - View modes */}
+        <div className="flex items-center gap-4">
+          <Tabs value={viewMode} onValueChange={(key: string) => setViewMode(key as 'grid' | 'list' | 'timeline')}>
+            <TabsList>
+              <TabsTrigger value="grid">Grid</TabsTrigger>
+              <TabsTrigger value="list">List</TabsTrigger>
+              <TabsTrigger value="timeline">Timeline</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {/* Zoom slider */}
+          <div className="flex items-center gap-2 ml-4">
+            <span className="text-sm text-muted-foreground w-12">Zoom</span>
+            {/* @ts-ignore - Slider value type */}
+            <Slider
+              minValue={50}
+              maxValue={200}
+              step={25}
+              value={zoomLevel}
+              onValueChange={(value) => setZoomLevel(Array.isArray(value) ? value[0] : value)}
+              className="w-32"
+            />
+            <span className="text-sm w-10 text-right">{zoomLevel}%</span>
+          </div>
+        </div>
+
+        {/* Center section - Selection info */}
+        <div className="flex items-center gap-2">
+          {selectedFrameIds.length > 0 ? (
+            <>
+              <span className="text-sm text-muted-foreground">
+                {selectedFrameIds.length} of {frames.length} selected
+              </span>
+              <Button size="sm" variant="flat" onClick={clearSelection}>
+                Deselect
+              </Button>
+            </>
+          ) : (
+            <Button size="sm" variant="flat" onClick={selectAllFrames}>
+              Select All
+            </Button>
+          )}
+        </div>
+
+        {/* Right section - Actions */}
+        <div className="flex items-center gap-2">
+          {/* Search */}
+          <div className="relative">
+            <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search frames..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 w-48"
+            />
+          </div>
+
+          {/* Filter toggle */}
+          <Button
+            size="sm"
+            variant={showFilters ? 'solid' : 'bordered'}
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <FilterIcon className="h-4 w-4 mr-1" />
+            Filters
+          </Button>
+
+          <Button
+            size="sm"
+            variant="bordered"
+            onClick={() => setExportOpen(true)}
+            disabled={selectedFrameIds.length === 0 && frames.length === 0}
+          >
+            📥 Export ({selectedFrameIds.length || frames.length})
+          </Button>
+          <Button
+            size="sm"
+            variant="flat"
+            buttonColor="danger"
+            onClick={clearFrames}
+          >
+            🗑️ Clear All
+          </Button>
         </div>
       </div>
 
-      {/* Center section - Selection info */}
-      <div className="flex items-center gap-2">
-        {selectedFrameIds.length > 0 ? (
-          <>
-            <span className="text-sm text-muted-foreground">
-              {selectedFrameIds.length} of {frames.length} selected
-            </span>
-            <Button size="sm" variant="flat" onClick={clearSelection}>
-              Deselect
+      {/* Filters bar */}
+      {showFilters && (
+        <div className="flex items-center gap-4 p-3 bg-secondary/50 rounded-lg">
+          <span className="text-sm font-medium">Filters:</span>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant={searchQuery ? 'solid' : 'bordered'}
+              onClick={() => setSearchQuery('')}
+            >
+              Clear Search
             </Button>
-          </>
-        ) : (
-          <Button size="sm" variant="flat" onClick={selectAllFrames}>
-            Select All
-          </Button>
-        )}
-      </div>
-
-      {/* Right section - Actions */}
-      <div className="flex items-center gap-2">
-        <Button
-          size="sm"
-          variant="bordered"
-          onClick={() => setExportOpen(true)}
-          disabled={selectedFrameIds.length === 0 && frames.length === 0}
-        >
-          📥 Export ({selectedFrameIds.length || frames.length})
-        </Button>
-        <Button
-          size="sm"
-          variant="flat"
-          color="danger"
-          onClick={clearFrames}
-        >
-          🗑️ Clear All
-        </Button>
-      </div>
+            <span className="text-sm text-muted-foreground">
+              Showing {filteredFrames.length} of {frames.length} frames
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Export Dialog */}
       <ExportDialog isOpen={exportOpen} onClose={() => setExportOpen(false)} />
