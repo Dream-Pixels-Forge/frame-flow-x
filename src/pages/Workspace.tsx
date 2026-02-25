@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react'
 import { Button, Card } from '@/components'
-import { VideoDropZone, VideoPreview, ExtractionProgress } from '@/components/video'
+import { VideoDropZone, VideoPreview, ExtractionProgress, BatchQueuePanel } from '@/components/video'
 import { FrameGallery } from '@/components/frames'
 import { UpscalePanel, EnhancementPanel, BeforeAfterComparison } from '@/components/ai'
-import { 
-  ArrowLeftIcon, 
+import {
+  ArrowLeftIcon,
   ArrowRightIcon,
-  SparklesIcon, 
-  PaletteIcon, 
+  SparklesIcon,
+  PaletteIcon,
   SearchIcon,
   CameraIcon,
   RefreshIcon,
   DownloadIcon,
+  FilmIcon,
 } from '@/components/icons'
 import { useVideoImportStore } from '@/stores/videoImportStore'
 import { useFrameExtractionStore } from '@/stores/frameExtractionStore'
 import { useFrameGalleryStore } from '@/stores/frameGalleryStore'
 import { useAIStore } from '@/stores/aiStore'
+import { useBatchQueueStore } from '@/stores/batchQueueStore'
 import { ExtractedFrame } from '@/utils/frameExtractor'
 import { Link } from 'react-router-dom'
 
@@ -28,20 +30,23 @@ export function WorkspacePage() {
   const [selectedFrame, setSelectedFrame] = useState<ExtractedFrame | null>(null)
   const [originalFrame, setOriginalFrame] = useState<Blob | null>(null)
   const [processedFrame, setProcessedFrame] = useState<Blob | null>(null)
-  
+  const [showQueue, setShowQueue] = useState(false)
+
   const file = useVideoImportStore((state) => state.file)
   const isExtracting = useFrameExtractionStore((state) => state.isExtracting)
-  const extractionComplete = useFrameExtractionStore((state) => 
+  const extractionComplete = useFrameExtractionStore((state) =>
     state.progress.status === 'completed'
   )
-  
+
   const frames = useFrameGalleryStore((state) => state.frames)
   const selectedFrameIds = useFrameGalleryStore((state) => state.selectedFrameIds)
-  
+
   const startExtraction = useFrameExtractionStore((state) => state.startExtraction)
   const pauseExtraction = useFrameExtractionStore((state) => state.pauseExtraction)
   const resumeExtraction = useFrameExtractionStore((state) => state.resumeExtraction)
   const cancelExtraction = useFrameExtractionStore((state) => state.cancelExtraction)
+
+  const addToQueue = useBatchQueueStore((state) => state.addToQueue)
 
   // Initialize AI service
   const initializeAI = useAIStore((state) => state.initialize)
@@ -90,6 +95,26 @@ export function WorkspacePage() {
 
   const handleFileSelected = (file: File) => {
     console.log('Video selected:', file.name)
+  }
+
+  const handleAddToQueue = async () => {
+    if (!file?.file) return
+    // Create VideoFile from File
+    const videoFile = {
+      id: crypto.randomUUID(),
+      name: file.file.name,
+      path: URL.createObjectURL(file.file),
+      file: file.file,
+      duration: file.duration,
+      width: file.width,
+      height: file.height,
+      fps: file.fps,
+      codec: file.codec,
+      size: file.file.size,
+      format: file.format,
+    }
+    addToQueue(videoFile)
+    setShowQueue(true)
   }
 
   const handleStartExtraction = async () => {
@@ -216,19 +241,32 @@ export function WorkspacePage() {
                       </p>
                     </div>
 
-                    {/* Start button */}
-                    <div className="pt-4">
-                      <Button 
-                        size="lg" 
+                    {/* Start buttons */}
+                    <div className="pt-4 space-y-2">
+                      <Button
+                        size="lg"
                         color="primary"
                         onClick={handleStartExtraction}
                         className="w-full"
                       >
                         <SparklesIcon size={18} className="mr-2" /> Start Extraction
                       </Button>
+                      <Button
+                        size="md"
+                        variant="bordered"
+                        onClick={handleAddToQueue}
+                        className="w-full"
+                      >
+                        <FilmIcon size={18} className="mr-2" /> Add to Batch Queue
+                      </Button>
                     </div>
                   </div>
                 </Card>
+              )}
+
+              {/* Batch Queue Panel */}
+              {showQueue && (
+                <BatchQueuePanel />
               )}
 
               {/* Extraction Progress */}

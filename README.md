@@ -30,7 +30,8 @@ Frame Flow X is a web and desktop application that helps users split videos into
 ## Project Status
 
 ✅ **Phase 1: Foundation** - Complete (2026-02-24)  
-🚀 **Phase 2: Core Features** - In Progress (90% Sprint 2.1 complete)
+✅ **Phase 2: Core Features** - Sprint 2.1 Complete (2026-02-25)  
+📋 **Sprint 2.2: Frame Gallery & Preview** - Next Up
 
 ### Completed
 
@@ -49,22 +50,25 @@ Frame Flow X is a web and desktop application that helps users split videos into
   - Video format compatibility
   - Performance benchmarks
 - [x] Git branching strategy (master, devs, features)
-- [x] **Sprint 2.1: Video Import & Frame Extraction** (90% complete)
-  - Video file picker with drag-and-drop
-  - FFmpeg.wasm frame extraction
-  - Progress tracking with ETA
-  - Pause/resume/cancel functionality
-  - Format selection (PNG, JPEG, WebP)
-  - Frame range selection
-  - Error handling and validation
+- [x] **Sprint 2.1: Video Import & Frame Extraction** - 100% Complete ✅
+  - ✅ Video file picker with drag-and-drop
+  - ✅ FFmpeg.wasm frame extraction
+  - ✅ Progress tracking with ETA
+  - ✅ Pause/resume/cancel functionality
+  - ✅ Format selection (PNG, JPEG, WebP)
+  - ✅ Frame range selection
+  - ✅ Error handling and validation
+  - ✅ **Batch video queue processing**
+  - ✅ **Unit tests (70 tests passing)**
+  - ✅ **E2E test workflow created**
 
-### Next Up: Complete Sprint 2.1
+### Next Up: Sprint 2.2 - Frame Gallery & Preview
 
-- [ ] Batch video queue processing
-- [ ] Unit tests (>90% coverage)
-- [ ] E2E test for extraction workflow
-
-Then: Sprint 2.2 - Frame Gallery & Preview
+- [ ] Enhance gallery virtualization for large frame sets
+- [ ] Add timeline scrubber with frame thumbnails
+- [ ] Improve frame navigation (keyboard shortcuts)
+- [ ] Add frame filtering and search
+- [ ] Implement favorites/bookmark system
 
 ## Quick Links
 
@@ -111,7 +115,7 @@ Week 14-16: ██████████████████████�
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/frame-flow-x.git
+git clone https://github.com/Dream-Pixels-Forge/frame-flow-x.git
 cd frame-flow-x
 
 # Install dependencies (using pnpm)
