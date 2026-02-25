@@ -52,34 +52,37 @@ Build a cross-platform video-to-frame processing application that enables users 
 
 ## Implementation Phases
 
-### Phase 1: Foundation (Weeks 1-2)
+### Phase 1: Foundation (Weeks 1-2) - ✅ COMPLETE
 
-**Sprint 1.1: Project Setup (Days 1-5)**
+**Status:** All critical foundation tasks completed
+**Completion Date:** 2026-02-24
+
+**Sprint 1.1: Project Setup (Days 1-5)** - ✅ Complete
 - [x] Initialize project structure
 - [x] Create README, .gitignore, .env.example
 - [x] Set up roadmap documentation
-- [ ] Initialize Node.js/TypeScript project with Vite
-- [ ] Configure ESLint, Prettier, Husky
-- [ ] Set up Git repository and branching strategy
-- [ ] Create base component library with shadcn/ui
+- [x] Initialize Node.js/TypeScript project with Vite
+- [x] Configure ESLint, Prettier, Husky
+- [x] Set up Git repository and branching strategy (master, devs, features)
+- [x] Create base component library with HeroUI
 
-**Sprint 1.2: Architecture Setup (Days 6-10)**
-- [ ] Define folder structure (monorepo vs single)
-- [ ] Set up Zustand state management
-- [ ] Configure React Router with protected routes
-- [ ] Set up Tailwind CSS + theming system
-- [ ] Create utility functions library
-- [ ] Set up testing infrastructure (Vitest + Playwright)
+**Sprint 1.2: Architecture Setup (Days 6-10)** - ✅ Complete
+- [x] Define folder structure (single repo)
+- [x] Set up Zustand state management
+- [x] Configure React Router with routes
+- [x] Set up Tailwind CSS + theming system
+- [x] Create utility functions library
+- [x] Set up testing infrastructure (Vitest + Playwright)
 
-**Sprint 1.3: Research & Planning (Days 11-14)**
+**Sprint 1.3: Research & Planning (Days 11-14)** - ✅ Complete
 - [x] Market analysis completed
 - [x] PRD completed
-- [ ] Research FFmpeg integration options (wasm vs native)
-- [ ] Evaluate AI upscaling APIs (Real-ESRGAN, Topaz, Replicate)
-- [ ] Test frame extraction performance benchmarks
-- [ ] Document video format compatibility matrix
+- [x] Research FFmpeg integration options (wasm vs native)
+- [x] Evaluate AI upscaling APIs (Real-ESRGAN, Topaz, Replicate)
+- [x] Test frame extraction performance benchmarks
+- [x] Document video format compatibility matrix
 
-**Deliverables:**
+**Deliverables:** ✅ All Complete
 - Functional project scaffold
 - Development environment ready
 - Technical decisions documented
@@ -87,16 +90,112 @@ Build a cross-platform video-to-frame processing application that enables users 
 
 ---
 
-### Phase 2: Core Features (Weeks 3-6)
+### Phase 2: Core Features (Weeks 3-6) - 🚀 IN PROGRESS
+
+**Phase Goal:** Build MVP core functionality for video import, frame extraction, gallery viewing, and export
+
+**Technical Decisions:**
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| FFmpeg Integration | FFmpeg.wasm (web) + fluent-ffmpeg (desktop) | Unified API, web-first approach |
+| Video Formats | MP4, MOV, AVI, MKV, WebM | Cover 95% of user needs |
+| Frame Formats | PNG (lossless), JPEG (web), WebP (modern) | Balance quality/size |
+| Storage Strategy | IndexedDB (web) + FileSystem (desktop) | Platform-optimized |
+| Upload Method | Direct file access (desktop) + Upload (web) | Best UX per platform |
+
+---
 
 **Sprint 2.1: Video Import & Frame Extraction (Days 15-25)**
-- [ ] Implement video file picker with drag-and-drop
-- [ ] Create FFmpeg frame extraction worker (web + desktop)
-- [ ] Build progress tracking with ETA calculation
-- [ ] Implement cancel/pause functionality
-- [ ] Add format selection (PNG, JPEG, WebP)
-- [ ] Create frame range selection UI
+
+**Goal:** Users can import videos and extract frames with progress tracking
+
+#### Technical Architecture
+```
+┌─────────────────────────────────────────────────────────┐
+│              Video Import & Extraction                   │
+├─────────────────────────────────────────────────────────┤
+│  ┌──────────────┐    ┌──────────────┐                  │
+│  │  File Picker │───▶│  Validator   │                  │
+│  │  + DnD Zone  │    │  (format,    │                  │
+│  └──────────────┘    │   size)      │                  │
+│                      └──────────────┘                  │
+│                            │                            │
+│                            ▼                            │
+│  ┌──────────────┐    ┌──────────────┐                  │
+│  │   Progress   │◀───│  FFmpeg      │                  │
+│  │   Tracker    │    │  Extractor   │                  │
+│  └──────────────┘    └──────────────┘                  │
+│                            │                            │
+│                            ▼                            │
+│                      ┌──────────────┐                  │
+│                      │  Frame       │                  │
+│                      │  Storage     │                  │
+│                      └──────────────┘                  │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### Implementation Details
+
+**1. Video File Picker Component**
+- HeroUI Card-based dropzone
+- Drag-and-drop with react-dropzone
+- File type validation (video/*)
+- Size validation (max 500MB web, unlimited desktop)
+- Preview player with metadata display
+
+**2. FFmpeg Integration**
+```typescript
+// Web: FFmpeg.wasm
+import { FFmpeg } from '@ffmpeg/ffmpeg'
+
+const ffmpeg = new FFmpeg()
+await ffmpeg.load({
+  coreURL: '/ffmpeg-core.js',
+  wasmURL: '/ffmpeg-core.wasm',
+})
+
+// Extract frames
+await ffmpeg.exec([
+  '-i', 'input.mp4',
+  '-vf', 'fps=1',  // 1 frame per second
+  '-q:v', '2',     // JPEG quality
+  'frame_%04d.jpg'
+])
+
+// Desktop: fluent-ffmpeg
+import ffmpeg from 'fluent-ffmpeg'
+
+ffmpeg('input.mp4')
+  .on('progress', (progress) => {
+    updateProgress(progress.percent)
+  })
+  .save('frames/frame_%04d.jpg')
+```
+
+**3. Progress Tracking**
+- Real-time percentage from FFmpeg
+- ETA calculation based on elapsed time
+- Cancel/pause via worker termination
+- Error handling with retry option
+
+- [x] Implement video file picker with drag-and-drop
+- [x] Create FFmpeg frame extraction worker (web + desktop)
+- [x] Build progress tracking with ETA calculation
+- [x] Implement cancel/pause functionality
+- [x] Add format selection (PNG, JPEG, WebP)
+- [x] Create frame range selection UI
 - [ ] Implement batch video import queue
+
+**Definition of Done:**
+- [x] Users can import videos via drag-drop or file picker
+- [x] Frame extraction works for MP4, MOV, WebM
+- [x] Progress tracking shows percentage and ETA
+- [x] Cancel functionality works mid-extraction
+- [ ] Batch processing queue implemented
+- [ ] All unit tests passing (>90% coverage)
+- [ ] E2E test for extraction workflow
+
+**Estimated Completion:** 2026-03-07
 
 **Sprint 2.2: Frame Gallery & Preview (Days 26-35)**
 - [ ] Build responsive grid gallery with virtualization
