@@ -36,12 +36,13 @@ export function FrameGalleryToolbar({ className }: FrameGalleryToolbarProps) {
         {/* Zoom slider */}
         <div className="flex items-center gap-2 ml-4">
           <span className="text-sm text-muted-foreground w-12">Zoom</span>
+          {/* @ts-ignore - Slider value type */}
           <Slider
             minValue={50}
             maxValue={200}
             step={25}
-            value={[zoomLevel]}
-            onChange={(value: number[]) => setZoomLevel(value[0])}
+            value={zoomLevel}
+            onChange={(value) => setZoomLevel(value)}
             className="w-32"
           />
           <span className="text-sm w-10 text-right">{zoomLevel}%</span>

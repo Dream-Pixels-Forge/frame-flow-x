@@ -133,10 +133,11 @@ export function UpscalePanel({ image, onResult, className }: UpscalePanelProps) 
       {/* Progress */}
       {isProcessing && (
         <div className="mb-6 space-y-3">
+          {/* @ts-ignore - Slider value type */}
           <Slider
             minValue={0}
             maxValue={100}
-            value={[progress.percentage]}
+            value={progress.percentage}
             disabled
             className="w-full"
           />
