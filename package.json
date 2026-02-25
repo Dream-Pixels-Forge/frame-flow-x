@@ -34,8 +34,6 @@
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
-    "@heroui/react": "^2.6.14",
-    "@heroui/theme": "^2.4.13",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -51,7 +49,6 @@
     "framer-motion": "^11.15.0",
     "jszip": "^3.10.1",
     "lucide-react": "^0.575.0",
-    "radix-ui": "^1.4.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
