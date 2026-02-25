@@ -1,32 +1,23 @@
-import { Input as HeroUIInput, InputProps } from '@heroui/react'
-import { cn } from '@/utils'
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
-interface InputPropsExtended extends InputProps {
-  label?: string
-  placeholder?: string
-  errorMessage?: string
-  size?: 'sm' | 'md' | 'lg'
-  variant?: 'flat' | 'bordered' | 'underlined' | 'faded'
-}
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export function Input({ 
-  label,
-  placeholder,
-  errorMessage,
-  size = 'md',
-  variant = 'bordered',
-  className,
-  ...props 
-}: InputPropsExtended) {
-  return (
-    <HeroUIInput
-      label={label}
-      placeholder={placeholder}
-      errorMessage={errorMessage}
-      size={size}
-      variant={variant}
-      className={cn('min-w-[200px]', className)}
-      {...props}
-    />
-  )
-}
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(
+          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Input.displayName = "Input"
+
+export { Input }

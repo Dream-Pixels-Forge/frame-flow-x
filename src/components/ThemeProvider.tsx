@@ -1,30 +1,68 @@
-import { HeroUIProvider } from '@heroui/react'
-import { useThemeStore } from '@/stores/themeStore'
-import { useEffect } from 'react'
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
-interface ThemeProviderProps {
+export interface ThemeProviderProps {
   children: React.ReactNode
+  defaultTheme?: string
+  storageKey?: string
+  attribute?: string
+  enableSystem?: boolean
+  disableTransitionOnChange?: boolean
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  const { theme, isDark } = useThemeStore()
+export function ThemeProvider({
+  children,
+  defaultTheme = 'system',
+  storageKey = 'theme',
+  attribute = 'class',
+  enableSystem = true,
+  disableTransitionOnChange = false,
+  ...props
+}: ThemeProviderProps) {
+  const [theme, setTheme] = React.useState<string>(defaultTheme)
 
-  // Sync theme with document element for HeroUI
-  useEffect(() => {
-    const root = document.documentElement
-    if (theme === 'system') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      root.classList.toggle('dark', prefersDark)
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem(storageKey)
+    if (savedTheme) {
+      setTheme(savedTheme)
+      applyTheme(savedTheme)
+    } else if (defaultTheme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      setTheme(systemTheme)
+      applyTheme(systemTheme)
     } else {
-      root.classList.toggle('dark', isDark)
+      applyTheme(defaultTheme)
     }
-  }, [theme, isDark])
+  }, [defaultTheme, storageKey])
+
+  const applyTheme = (selectedTheme: string) => {
+    const root = document.documentElement
+    if (disableTransitionOnChange) {
+      root.classList.add('[&_*]:!transition-none')
+      window.setTimeout(() => root.classList.remove('[&_*]:!transition-none'), 0)
+    }
+    
+    if (attribute === 'class') {
+      if (selectedTheme === 'dark' || (selectedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark')
+      } else {
+        root.classList.remove('dark')
+      }
+    }
+  }
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    localStorage.setItem(storageKey, newTheme)
+    applyTheme(newTheme)
+  }
 
   return (
-    <HeroUIProvider>
-      <div className="min-h-screen bg-background text-foreground">
-        {children}
-      </div>
-    </HeroUIProvider>
+    <div className={cn(theme === 'dark' ? 'dark' : '')} {...props}>
+      {children}
+    </div>
   )
 }
+
+export { useTheme } from '@/hooks/useTheme'

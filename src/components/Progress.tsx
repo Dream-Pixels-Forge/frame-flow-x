@@ -1,34 +1,25 @@
-import { Progress as HeroUIProgress } from '@heroui/react'
-import { cn } from '@/utils'
+import * as React from 'react'
+import * as ProgressPrimitive from '@radix-ui/react-progress'
+import { cn } from '@/lib/utils'
 
-interface ProgressProps {
-  label?: string
-  value?: number
-  size?: 'sm' | 'md' | 'lg'
-  color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
-  className?: string
-  maxValue?: number
-  minValue?: number
-}
-
-export function Progress({
-  label,
-  value = 0,
-  size = 'md',
-  color = 'primary',
-  className,
-  maxValue = 100,
-  minValue = 0,
-}: ProgressProps) {
-  return (
-    <HeroUIProgress
-      label={label}
-      value={value}
-      maxValue={maxValue}
-      minValue={minValue}
-      size={size}
-      color={color}
-      className={cn('w-full', className)}
+const Progress = React.forwardRef<
+  React.ElementRef<typeof ProgressPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
+>(({ className, value, ...props }, ref) => (
+  <ProgressPrimitive.Root
+    ref={ref}
+    className={cn(
+      "relative h-2 w-full overflow-hidden rounded-full bg-primary/20",
+      className
+    )}
+    {...props}
+  >
+    <ProgressPrimitive.Indicator
+      className="h-full w-full flex-1 bg-primary transition-all"
+      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
-  )
-}
+  </ProgressPrimitive.Root>
+))
+Progress.displayName = ProgressPrimitive.Root.displayName
+
+export { Progress }
