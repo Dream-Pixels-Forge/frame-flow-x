@@ -1,4 +1,4 @@
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@/components'
 
 interface DropdownItem {
   key: string
@@ -16,21 +16,21 @@ interface DropdownComponentProps {
 
 export function DropdownComponent({ trigger, items, label, className }: DropdownComponentProps) {
   return (
-    <Dropdown className={className}>
-      <DropdownTrigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         {trigger}
-      </DropdownTrigger>
-      <DropdownMenu aria-label={label} variant="flat">
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className={className}>
+        {label && <DropdownMenuLabel>{label}</DropdownMenuLabel>}
         {items.map((item) => (
-          <DropdownItem 
-            key={item.key} 
-            shortcut={item.shortcut}
-            onClick={item.onClick}
-          >
+          <DropdownMenuItem key={item.key} onClick={item.onClick}>
             {item.label}
-          </DropdownItem>
+            {item.shortcut && (
+              <span className="ml-auto text-xs text-muted-foreground">{item.shortcut}</span>
+            )}
+          </DropdownMenuItem>
         ))}
-      </DropdownMenu>
-    </Dropdown>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

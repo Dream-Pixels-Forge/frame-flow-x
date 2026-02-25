@@ -6,10 +6,10 @@ interface LayoutProps {
   currentRoute?: string
 }
 
-export function Layout({ children, currentRoute = '/' }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header currentRoute={currentRoute} />
+      <Header />
       <main className="flex-1">
         {children}
       </main>
