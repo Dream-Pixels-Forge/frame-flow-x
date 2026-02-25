@@ -29,8 +29,8 @@ Frame Flow X is a web and desktop application that helps users split videos into
 
 ## Project Status
 
-✅ **Phase 1: Foundation** - Complete (2026-02-24)
-📋 **Phase 2: Core Features** - Starting Next
+✅ **Phase 1: Foundation** - Complete (2026-02-24)  
+🚀 **Phase 2: Core Features** - In Progress (90% Sprint 2.1 complete)
 
 ### Completed
 
@@ -48,13 +48,23 @@ Frame Flow X is a web and desktop application that helps users split videos into
   - AI upscaling evaluation
   - Video format compatibility
   - Performance benchmarks
+- [x] Git branching strategy (master, devs, features)
+- [x] **Sprint 2.1: Video Import & Frame Extraction** (90% complete)
+  - Video file picker with drag-and-drop
+  - FFmpeg.wasm frame extraction
+  - Progress tracking with ETA
+  - Pause/resume/cancel functionality
+  - Format selection (PNG, JPEG, WebP)
+  - Frame range selection
+  - Error handling and validation
 
-### Next Up: Phase 2 - Core Features (Weeks 3-6)
+### Next Up: Complete Sprint 2.1
 
-- Video import with drag-and-drop
-- FFmpeg frame extraction engine
-- Frame gallery with preview
-- Export functionality
+- [ ] Batch video queue processing
+- [ ] Unit tests (>90% coverage)
+- [ ] E2E test for extraction workflow
+
+Then: Sprint 2.2 - Frame Gallery & Preview
 
 ## Quick Links
 

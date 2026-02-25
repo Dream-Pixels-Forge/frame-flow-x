@@ -171,41 +171,51 @@
 
 ---
 
-## Phase 2: Core Features (Weeks 3-6)
+## Phase 2: Core Features (Weeks 3-6) - 🚀 IN PROGRESS
 
-### Sprint 2.1: Video Import & Frame Extraction (Days 15-25)
+**Status:** Sprint 2.1 mostly complete (90%)  
+**Current Sprint:** 2.1 - Video Import & Frame Extraction  
+**Next Milestone:** Sprint 2.1 Complete (2026-03-07)
+
+### Sprint 2.1: Video Import & Frame Extraction (Days 15-25) - 🔄 IN PROGRESS
 
 #### 2.1.1 Video Import
-- [ ] 2.1.1.1 Create video file picker component | P0 | Owner: Frontend Eng
-- [ ] 2.1.1.2 Implement drag-and-drop zone | P0 | Owner: Frontend Eng
-- [ ] 2.1.1.3 Add file type validation | P0 | Owner: Frontend Eng
-- [ ] 2.1.1.4 Add file size validation (max 500MB) | P0 | Owner: Frontend Eng
-- [ ] 2.1.1.5 Create file upload progress indicator | P0 | Owner: Frontend Eng
-- [ ] 2.1.1.6 Implement video preview player | P0 | Owner: Frontend Eng
-- [ ] 2.1.1.7 Display video metadata (duration, resolution, codec) | P0 | Owner: Frontend Eng
+- [x] 2.1.1.1 Create video file picker component | P0 | Owner: Frontend Eng
+- [x] 2.1.1.2 Implement drag-and-drop zone | P0 | Owner: Frontend Eng
+- [x] 2.1.1.3 Add file type validation | P0 | Owner: Frontend Eng
+- [x] 2.1.1.4 Add file size validation (max 2GB) | P0 | Owner: Frontend Eng
+- [x] 2.1.1.5 Create file upload progress indicator | P0 | Owner: Frontend Eng
+- [x] 2.1.1.6 Implement video preview player | P0 | Owner: Frontend Eng
+- [x] 2.1.1.7 Display video metadata (duration, resolution, fps) | P0 | Owner: Frontend Eng
 
 #### 2.1.2 Frame Extraction Engine
-- [ ] 2.1.2.1 Create FFmpeg worker for web (FFmpeg.wasm) | P0 | Owner: Video Eng
-- [ ] 2.1.2.2 Create FFmpeg processor for desktop (Node.js) | P0 | Owner: Video Eng
-- [ ] 2.1.2.3 Implement frame extraction function | P0 | Owner: Video Eng
-- [ ] 2.1.2.4 Add format selection (PNG, JPEG, WebP) | P0 | Owner: Video Eng
-- [ ] 2.1.2.5 Add quality/compression settings | P0 | Owner: Video Eng
-- [ ] 2.1.2.6 Implement frame range selection | P1 | Owner: Video Eng
+- [x] 2.1.2.1 Create FFmpeg worker for web (FFmpeg.wasm) | P0 | Owner: Video Eng
+- [x] 2.1.2.2 Create FFmpeg processor for desktop (Node.js) | P0 | Owner: Video Eng
+- [x] 2.1.2.3 Implement frame extraction function | P0 | Owner: Video Eng
+- [x] 2.1.2.4 Add format selection (PNG, JPEG, WebP) | P0 | Owner: Video Eng
+- [x] 2.1.2.5 Add quality/compression settings | P0 | Owner: Video Eng
+- [x] 2.1.2.6 Implement frame range selection | P1 | Owner: Video Eng
 - [ ] 2.1.2.7 Add batch video queue processing | P2 | Owner: Video Eng
 
 #### 2.1.3 Progress & Control
-- [ ] 2.1.3.1 Create progress bar with percentage | P0 | Owner: Frontend Eng
-- [ ] 2.1.3.2 Implement ETA calculation | P0 | Owner: Video Eng
-- [ ] 2.1.3.3 Add cancel extraction functionality | P0 | Owner: Frontend Eng
-- [ ] 2.1.3.4 Add pause/resume functionality | P1 | Owner: Video Eng
-- [ ] 2.1.3.5 Create extraction status notifications | P0 | Owner: Frontend Eng
-- [ ] 2.1.3.6 Handle extraction errors gracefully | P0 | Owner: Frontend Eng
+- [x] 2.1.3.1 Create progress bar with percentage | P0 | Owner: Frontend Eng
+- [x] 2.1.3.2 Implement ETA calculation | P0 | Owner: Video Eng
+- [x] 2.1.3.3 Add cancel extraction functionality | P0 | Owner: Frontend Eng
+- [x] 2.1.3.4 Add pause/resume functionality | P1 | Owner: Video Eng
+- [x] 2.1.3.5 Create extraction status notifications | P0 | Owner: Frontend Eng
+- [x] 2.1.3.6 Handle extraction errors gracefully | P0 | Owner: Frontend Eng
 
 **Sprint 2.1 Definition of Done:**
-- [ ] Users can import videos
-- [ ] Frame extraction works for all supported formats
-- [ ] Progress tracking accurate
-- [ ] Error handling comprehensive
+- [x] Users can import videos via drag-drop or file picker
+- [x] Frame extraction works for MP4, MOV, WebM
+- [x] Progress tracking shows percentage and ETA
+- [x] Cancel functionality works mid-extraction
+- [ ] Batch processing queue implemented
+- [ ] All unit tests passing (>90% coverage)
+- [ ] E2E test for extraction workflow
+
+**Estimated Completion:** 2026-03-07  
+**Completion:** 90%
 
 ---
 
