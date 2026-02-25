@@ -33,6 +33,7 @@ Frame Flow X is a web and desktop application that helps users split videos into
 📋 **Phase 2: Core Features** - Starting Next
 
 ### Completed
+
 - [x] Project initialization (README, .gitignore, .env.example)
 - [x] Roadmap documentation structure
 - [x] Market analysis completed
@@ -49,6 +50,7 @@ Frame Flow X is a web and desktop application that helps users split videos into
   - Performance benchmarks
 
 ### Next Up: Phase 2 - Core Features (Weeks 3-6)
+
 - Video import with drag-and-drop
 - FFmpeg frame extraction engine
 - Frame gallery with preview
@@ -91,7 +93,7 @@ Week 14-16: ██████████████████████�
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Git
 
@@ -119,7 +121,7 @@ pnpm build:desktop
 
 | Command | Description |
 |---------|-------------|
-| `pnpm dev` | Start development server at http://localhost:5173 |
+| `pnpm dev` | Start development server at <http://localhost:5173> |
 | `pnpm build` | Build for production |
 | `pnpm preview` | Preview production build |
 | `pnpm lint` | Run ESLint |
